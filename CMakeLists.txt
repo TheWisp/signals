@@ -4,7 +4,7 @@ project (Signals)
 add_executable(Signals 
 	main.cpp
 	signals.hpp
-	BenchEventVsCall.h
+	Bench.h
 )
 set_target_properties(Signals PROPERTIES
 	CXX_STANDARD 17

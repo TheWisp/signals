@@ -13,13 +13,13 @@ namespace fteng
 			void* func;
 		};
 
-		// space can be optimized by using "struct of array" containers
-		std::vector<call>       calls;
-		std::vector<conn_base*> conns;
+		// space can be optimized by using "struct of array" containers since both always have the same size
+		mutable std::vector<call>       calls;
+		mutable std::vector<conn_base*> conns;
 
 		// space can be optimized by stealing 2 unused bits from the vector size
-		bool calling = false;
-		bool dirty = false;
+		mutable bool calling = false;
+		mutable bool dirty = false;
 
 		~sig_base();
 	};
@@ -28,10 +28,10 @@ namespace fteng
 
 	struct conn_base
 	{
-		sig_base* sig;
-		size_t    idx;
+		const sig_base* sig;
+		size_t          idx;
 
-		conn_base(sig_base* sig, size_t idx) : sig(sig), idx(idx) {}
+		conn_base(const sig_base* sig, size_t idx) : sig(sig), idx(idx) {}
 
 		virtual ~conn_base()
 		{
@@ -65,7 +65,7 @@ namespace fteng
 
 	struct [[nodiscard]] connection
 	{
-		conn_base * ptr = nullptr;
+		conn_base* ptr = nullptr;
 
 		void disconnect()
 		{
@@ -89,8 +89,9 @@ namespace fteng
 		connection& operator=(const connection&) = delete;
 
 		connection(connection&& other) noexcept
+			: ptr (other.ptr)
 		{
-			*this = std::move(other);
+			other.ptr = nullptr;
 		}
 
 		connection& operator=(connection&& other) noexcept
@@ -107,7 +108,7 @@ namespace fteng
 	struct signal<void(A...)> : sig_base
 	{
 		template<typename ... ActualArgsT>
-		void operator()(ActualArgsT&& ... args)
+		void operator()(ActualArgsT&& ... args) const
 		{
 			bool recursion = calling;
 			if (!calling) calling = 1;
@@ -147,25 +148,25 @@ namespace fteng
 			}
 		}
 
-		template<auto func, class C>
-		[[nodiscard]] connection connect(C* object)
+		template<auto PMF, class C>
+		[[nodiscard]] connection connect(C* object) const
 		{
 			size_t idx = conns.size();
 			auto& call = calls.emplace_back();
 			call.object = object;
-			call.func = +[](void* obj, A ... args) {((*static_cast<C * *>(obj))->*func)(args...); };
+			call.func = +[](void* obj, A ... args) {((*reinterpret_cast<C**>(obj))->*PMF)(args...); };
 			conn_base* conn = new conn_base(this, idx);
 			conns.emplace_back(conn);
 			return { conn };
 		}
 
 		template<auto func>
-		[[nodiscard]] connection connect()
+		[[nodiscard]] connection connect() const
 		{
 			return connect(func);
 		}
 
-		[[nodiscard]] connection connect(void(*func)(A...))
+		[[nodiscard]] connection connect(void(*func)(A...)) const
 		{
 			size_t idx = conns.size();
 			auto& call = calls.emplace_back();
@@ -176,7 +177,7 @@ namespace fteng
 		}
 
 		template<typename F>
-		[[nodiscard]] connection connect(F functor)
+		[[nodiscard]] connection connect(F functor) const
 		{
 			if constexpr (std::is_convertible_v<F, void(*)(A...)>)
 			{

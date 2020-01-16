@@ -3,6 +3,8 @@
 #include <functional>
 #include <iostream>
 #include <algorithm>
+#include <numeric>
+#include <random>
 #include <array>
 #include <vector>
 #include <chrono>
@@ -24,7 +26,7 @@ struct Bar
 
 	connection conn;
 
-	Bar(Foo& foo)
+	Bar(const Foo& foo)
 	{
 		conn = foo.sig.connect<&Bar::onSig>(this);
 	}
@@ -68,13 +70,14 @@ namespace ReentranceTest
 
 		Bar bar(foo);
 
-		foo.sig(3);
-		assert(bar.x == 3);
+		foo.sig(30);
+		assert(bar.x == 30);
+		foo.sig(30);
+		assert(bar.x == 60);
 	}
 
 	inline void Bar::onSig(int count)
 	{
-		std::cout << "Calling " << this << std::endl;
 		if (flag) {
 			if (count > 0) {
 				this->x++;
@@ -136,7 +139,7 @@ namespace LambdaTest
 			x += y + count;
 		};
 		static_assert(std::is_trivially_destructible_v<decltype(large_lambda)>);
-		static_assert(sizeof large_lambda > 8);
+		static_assert(sizeof(large_lambda) > 8);
 		conn = sig.connect(large_lambda);
 		sig(32);
 		assert(x == 232);
@@ -155,7 +158,9 @@ void test()
 {
 	//basic usage, class
 	{
-		Foo foo;
+		// Being able to connect, disconnect and emit signal owned by a const object demonstrates 
+		// that the signal is considered side-effect-free to its owner. All its data are mutable.
+		const Foo foo; 
 		Bar bar(foo);
 		foo.sig(3.14f);
 		assert(bar.total == 3.14f);
@@ -193,13 +198,13 @@ void test()
 	LambdaTest::test();
 }
 
-namespace BenchEventVector
+namespace Bench
 {
-#include "BenchEventVsCall.h"
+#include "Bench.h"
 }
 
 int main()
 {
 	test();
-	BenchEventVector::test();
+	Bench::bench();
 }
