@@ -4,68 +4,98 @@
 
 namespace fteng
 {
-	struct conn_base;
-	struct sig_base
+	namespace details
 	{
-		struct call
+		struct conn_base;
+		struct sig_base
 		{
-			void* object;
-			void* func;
+			struct call
+			{
+				void* object;
+				void* func;
+			};
+
+			// space can be optimized by using "struct of array" containers since both always have the same size
+			mutable std::vector<call>       calls;
+			mutable std::vector<conn_base*> conns;
+
+			// space can be optimized by stealing 2 unused bits from the vector size
+			mutable bool calling = false;
+			mutable bool dirty = false;
+
+			sig_base() = default;
+			~sig_base();
+			sig_base(const sig_base&) = delete;
+			sig_base& operator= (const sig_base&) = delete;
+			sig_base(sig_base&& other);
+			sig_base& operator= (sig_base&& other);
 		};
 
-		// space can be optimized by using "struct of array" containers since both always have the same size
-		mutable std::vector<call>       calls;
-		mutable std::vector<conn_base*> conns;
-
-		// space can be optimized by stealing 2 unused bits from the vector size
-		mutable bool calling = false;
-		mutable bool dirty = false;
-
-		~sig_base();
-	};
-
-	template<typename F> struct signal;
-
-	struct conn_base
-	{
-		const sig_base* sig;
-		size_t          idx;
-
-		conn_base(const sig_base* sig, size_t idx) : sig(sig), idx(idx) {}
-
-		virtual ~conn_base()
+		struct conn_base
 		{
-			if (sig)
+			const sig_base* sig;
+			size_t          idx;
+
+			conn_base(const sig_base* sig, size_t idx) : sig(sig), idx(idx) {}
+
+			virtual ~conn_base()
 			{
-				sig->calls[idx].object = nullptr;
-				sig->calls[idx].func = nullptr;
-				sig->conns[idx] = nullptr;
-				sig->dirty = 1;
+				if (sig)
+				{
+					sig->calls[idx].object = nullptr;
+					sig->calls[idx].func = nullptr;
+					sig->conns[idx] = nullptr;
+					sig->dirty = 1;
+				}
 			}
-		}
-	};
+		};
 
-	template<typename T>
-	struct conn_nontrivial : conn_base
-	{
-		using conn_base::conn_base;
-
-		virtual ~conn_nontrivial()
+		template<typename T>
+		struct conn_nontrivial : conn_base
 		{
-			if (sig)
-				reinterpret_cast<T*>(&sig->calls[idx].object)->~T();
-		}
-	};
+			using conn_base::conn_base;
 
-	sig_base::~sig_base()
-	{
-		for (conn_base* c : conns)
-			if (c) c->sig = nullptr;
+			virtual ~conn_nontrivial()
+			{
+				if (sig)
+					reinterpret_cast<T*>(&sig->calls[idx].object)->~T();
+			}
+		};
+
+		sig_base::~sig_base()
+		{
+			for (conn_base* c : conns)
+				if (c) c->sig = nullptr;
+		}
+
+		sig_base::sig_base(sig_base&& other)
+			: calls(std::move(other.calls))
+			, conns(std::move(other.conns))
+			, calling(other.calling)
+			, dirty(other.dirty)
+		{
+			for (conn_base* c : conns)
+				if (c) c->sig = this;
+		}
+
+		sig_base& sig_base::operator= (sig_base&& other)
+		{
+			calls = std::move(other.calls);
+			conns = std::move(other.conns);
+			calling = other.calling;
+			dirty = other.dirty;
+			for (conn_base* c : conns)
+				if (c) c->sig = this;
+			return *this;
+		}
+
 	}
+	
+	template<typename F> struct signal;
 
 	struct [[nodiscard]] connection
 	{
-		conn_base* ptr = nullptr;
+		details::conn_base* ptr = nullptr;
 
 		void disconnect()
 		{
@@ -75,8 +105,6 @@ namespace fteng
 				ptr = nullptr;
 			}
 		}
-
-		connection(conn_base* ptr) : ptr(ptr) {}
 
 		connection() = default;
 
@@ -103,9 +131,8 @@ namespace fteng
 		}
 	};
 
-
 	template<typename ... A>
-	struct signal<void(A...)> : sig_base
+	struct signal<void(A...)> : details::sig_base
 	{
 		template<typename ... ActualArgsT>
 		void operator()(ActualArgsT&& ... args) const
@@ -155,9 +182,9 @@ namespace fteng
 			auto& call = calls.emplace_back();
 			call.object = object;
 			call.func = +[](void* obj, A ... args) {((*reinterpret_cast<C**>(obj))->*PMF)(args...); };
-			conn_base* conn = new conn_base(this, idx);
+			details::conn_base* conn = new details::conn_base(this, idx);
 			conns.emplace_back(conn);
-			return { conn };
+			return make_connection(conn);
 		}
 
 		template<auto func>
@@ -171,9 +198,9 @@ namespace fteng
 			size_t idx = conns.size();
 			auto& call = calls.emplace_back();
 			call.func = func;
-			conn_base* conn = new conn_base(this, idx);
+			details::conn_base* conn = new details::conn_base(this, idx);
 			conns.emplace_back(conn);
-			return { conn };
+			return make_connection(conn);
 		}
 
 		template<typename F>
@@ -190,10 +217,10 @@ namespace fteng
 				auto& call = calls.emplace_back();
 				call.func = +[](void* obj, A ... args) { reinterpret_cast<F*>(obj)->operator()(args...); };
 				new (&call.object) F(functor);
-				using conn_t = std::conditional_t<std::is_trivially_destructible_v<F>, conn_base, conn_nontrivial<F>>;
-				conn_base* conn = new conn_t(this, idx);
+				using conn_t = std::conditional_t<std::is_trivially_destructible_v<F>, details::conn_base, details::conn_nontrivial<F>>;
+				details::conn_base* conn = new conn_t(this, idx);
 				conns.emplace_back(conn);
-				return { conn };
+				return make_connection(conn);
 			}
 			else
 			{
@@ -213,10 +240,19 @@ namespace fteng
 				auto& call = calls.emplace_back();
 				call.func = (void*)+[](void* obj, A ... args) { reinterpret_cast<unique*>(obj)->ptr->operator()(args...); };
 				new (&call.object) unique{ new F(functor) };
-				conn_base* conn = new conn_nontrivial<unique>(this, idx);
+				details::conn_base* conn = new details::conn_nontrivial<unique>(this, idx);
 				conns.emplace_back(conn);
-				return { conn };
+				return make_connection(conn);
 			}
+		}
+
+	private:
+
+		inline static connection make_connection(details::conn_base* ptr) 
+		{
+			connection conn;
+			conn.ptr = ptr;
+			return conn;
 		}
 	};
 }
