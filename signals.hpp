@@ -139,7 +139,7 @@ namespace fteng
 		{
 			bool recursion = calling;
 			if (!calling) calling = 1;
-			for (size_t i = 0; i < calls.size(); ++i)
+			for (size_t i = 0, n = calls.size(); i < n; ++i)
 			{
 				auto& cb = calls[i];
 				if (cb.func)
