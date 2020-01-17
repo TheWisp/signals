@@ -235,7 +235,7 @@ namespace fteng
 
 				size_t idx = conns.size();
 				auto& call = calls.emplace_back();
-				call.func = (void*)+[](void* obj, A ... args) { reinterpret_cast<unique*>(obj)->ptr->operator()(args...); };
+				call.func = reinterpret_cast<void*>(+[](void* obj, A ... args) { reinterpret_cast<unique*>(obj)->ptr->operator()(args...); });
 				new (&call.object) unique{ new F(functor) };
 				details::conn_base* conn = new details::conn_nontrivial<unique>(this, idx);
 				conns.emplace_back(conn);
