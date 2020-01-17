@@ -55,6 +55,7 @@ void bench_classes(bool diff_class, bool shuffle_obj)
 {
 	std::random_device rd;
 	std::mt19937 rgen(rd());
+	std::uniform_int_distribution<int> dis(0, 99);
 
 	auto class_desc = diff_class ? "RANDOM classes" : "SAME class";
 	auto obj_desc = shuffle_obj ? "RANDOM objects" : "SEQUENTIAL objects";
@@ -63,15 +64,13 @@ void bench_classes(bool diff_class, bool shuffle_obj)
 	std::vector<std::unique_ptr<BarBase>> bars; //represents a typical setup for virtual-based observers: vector of interface
 	Foo foo;
 	if (diff_class)
-		for (int i = 0; i < 100'000; i++) bars.emplace_back(fac[rand() % 100]());
+		for (int i = 0; i < 100'000; i++) bars.emplace_back(fac[dis(rgen)]());
 	else
 		for (int i = 0; i < 100'000; i++) bars.emplace_back(fac[0]());
+	if (shuffle_obj) std::shuffle(bars.begin(), bars.end(), rgen);
 
-	std::vector<size_t> indices(100'000);
-	std::iota(indices.begin(), indices.end(), 0);
-	if (shuffle_obj) std::shuffle(indices.begin(), indices.end(), rgen);
-	for (size_t i : indices)
-		bars[i]->connect(&foo);
+	for(auto& bar : bars)
+		bar->connect(&foo);
 
 	double signal_duration, signal_lambda_duration, call_duration;
 
@@ -95,10 +94,8 @@ void bench_classes(bool diff_class, bool shuffle_obj)
 
 	{
 		auto start = std::chrono::high_resolution_clock::now();
-		for (size_t i : indices)
-		{
-			bars[i]->vf(0.001f);
-		}
+		for (auto& bar : bars)
+			bar->vf(0.001f);
 		auto end = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> diff = end - start;
 		std::cout << "Virtual call: " <<std::chrono::duration_cast<std::chrono::microseconds>(diff).count() << " us\n";
