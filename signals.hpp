@@ -27,8 +27,8 @@ namespace fteng
 			~sig_base();
 			sig_base(const sig_base&) = delete;
 			sig_base& operator= (const sig_base&) = delete;
-			sig_base(sig_base&& other);
-			sig_base& operator= (sig_base&& other);
+			sig_base(sig_base&& other) noexcept;
+			sig_base& operator= (sig_base&& other) noexcept;
 		};
 
 		struct conn_base
@@ -68,7 +68,7 @@ namespace fteng
 				if (c) c->sig = nullptr;
 		}
 
-		sig_base::sig_base(sig_base&& other)
+		sig_base::sig_base(sig_base&& other) noexcept
 			: calls(std::move(other.calls))
 			, conns(std::move(other.conns))
 			, calling(other.calling)
@@ -78,7 +78,7 @@ namespace fteng
 				if (c) c->sig = this;
 		}
 
-		sig_base& sig_base::operator= (sig_base&& other)
+		sig_base& sig_base::operator= (sig_base&& other) noexcept
 		{
 			calls = std::move(other.calls);
 			conns = std::move(other.conns);
@@ -99,11 +99,8 @@ namespace fteng
 
 		void disconnect()
 		{
-			if (ptr)
-			{
-				delete ptr;
-				ptr = nullptr;
-			}
+			delete ptr;
+			ptr = nullptr;
 		}
 
 		connection() = default;
@@ -181,7 +178,7 @@ namespace fteng
 			size_t idx = conns.size();
 			auto& call = calls.emplace_back();
 			call.object = object;
-			call.func = +[](void* obj, A ... args) {((*reinterpret_cast<C**>(obj))->*PMF)(args...); };
+			call.func = reinterpret_cast<void*>(+[](void* obj, A ... args) {((*reinterpret_cast<C**>(obj))->*PMF)(args...); });
 			details::conn_base* conn = new details::conn_base(this, idx);
 			conns.emplace_back(conn);
 			return make_connection(conn);
@@ -197,7 +194,7 @@ namespace fteng
 		{
 			size_t idx = conns.size();
 			auto& call = calls.emplace_back();
-			call.func = func;
+			call.func = reinterpret_cast<void*>(func);
 			details::conn_base* conn = new details::conn_base(this, idx);
 			conns.emplace_back(conn);
 			return make_connection(conn);
@@ -215,7 +212,7 @@ namespace fteng
 				//copy the functor. 
 				size_t idx = conns.size();
 				auto& call = calls.emplace_back();
-				call.func = +[](void* obj, A ... args) { reinterpret_cast<F*>(obj)->operator()(args...); };
+				call.func = reinterpret_cast<void*>(+[](void* obj, A ... args) { reinterpret_cast<F*>(obj)->operator()(args...); });
 				new (&call.object) F(functor);
 				using conn_t = std::conditional_t<std::is_trivially_destructible_v<F>, details::conn_base, details::conn_nontrivial<F>>;
 				details::conn_base* conn = new conn_t(this, idx);
