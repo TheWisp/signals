@@ -61,7 +61,7 @@ void bench_classes(bool diff_class, bool shuffle_obj)
 	auto obj_desc = shuffle_obj ? "RANDOM objects" : "SEQUENTIAL objects";
 	std::cout << "Signal vs virtual " << "(" << class_desc << ", " << obj_desc << ")\n";
 
-	std::vector<std::unique_ptr<BarBase>> bars; //represents a typical setup for virtual-based observers: vector of interface
+	std::vector<BarBase*> bars; //represents a typical setup for virtual-based observers: vector of interface
 	Foo foo;
 	if (diff_class)
 		for (int i = 0; i < 100'000; i++) bars.emplace_back(fac[dis(rgen)]());
@@ -105,6 +105,9 @@ void bench_classes(bool diff_class, bool shuffle_obj)
 	std::cout << "Signal (member func) takes " << (int)(100 * signal_duration / call_duration) << "% time of virtual function calls \n";
 	std::cout << "Signal (lambda) takes " << (int)(100 * signal_lambda_duration / call_duration) << "% time of virtual function calls \n";
 	std::cout << "\n" << std::endl;
+
+	for (auto bar : bars)
+		delete bar;
 }
 
 void bench()
