@@ -154,6 +154,28 @@ namespace LambdaTest
 	}
 }
 
+namespace BlockingConnection
+{
+	signal<void(int count)> sig;
+
+	void test()
+	{
+		int x = 0;
+
+		connection conn = sig.connect([&](int count) {
+			x += count;
+			conn.block();
+			sig(count);
+			conn.unblock();
+		});
+
+		sig(33);
+		assert(x == 33);
+		sig(33);
+		assert(x == 66);
+	}
+}
+
 void test()
 {
 	//basic usage, class
@@ -196,6 +218,9 @@ void test()
 
 	//basic usage, lambda
 	LambdaTest::test();
+
+	//blocking connection
+	BlockingConnection::test();
 }
 
 namespace Bench

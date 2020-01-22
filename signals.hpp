@@ -31,21 +31,72 @@ namespace fteng
 			sig_base& operator= (sig_base&& other) noexcept;
 		};
 
+		struct blocked_connection
+		{
+			const sig_base* sig = nullptr;
+			sig_base::call call = {nullptr, nullptr};
+		};
+
 		struct conn_base
 		{
-			const sig_base* sig;
-			size_t          idx;
+			union
+			{
+				const sig_base* sig;
+				blocked_connection* blocked_conn;
+			};
+			
+			size_t          idx : 31;
+			size_t          blocked : 1;
 
-			conn_base(const sig_base* sig, size_t idx) : sig(sig), idx(idx) {}
+			conn_base(const sig_base* sig, size_t idx) : sig(sig), idx(idx), blocked(0) {}
 
 			virtual ~conn_base()
 			{
-				if (sig)
+				if (!blocked)
 				{
-					sig->calls[idx].object = nullptr;
-					sig->calls[idx].func = nullptr;
-					sig->conns[idx] = nullptr;
-					sig->dirty = 1;
+					if (sig)
+					{
+						sig->calls[idx].object = nullptr;
+						sig->calls[idx].func = nullptr;
+						sig->conns[idx] = nullptr;
+						sig->dirty = 1;
+					}
+				}
+				else
+				{
+					delete blocked_conn;
+				}
+			}
+
+			void set_sig(const sig_base* sig) 
+			{
+				if (blocked) this->blocked_conn->sig = sig;
+				else this->sig = sig;
+			}
+
+			void block()
+			{
+				if (!blocked)
+				{
+					blocked = 1;
+					const sig_base* orig_sig = sig;
+					sig = nullptr;
+					blocked_conn = new blocked_connection;
+					blocked_conn->sig = orig_sig;
+					std::swap(blocked_conn->call, orig_sig->calls[idx]);
+				}
+			}
+
+			void unblock()
+			{
+				if (blocked)
+				{
+					const sig_base* orig_sig = blocked_conn->sig;
+					std::swap(blocked_conn->call, orig_sig->calls[idx]);
+					delete blocked_conn;
+					blocked_conn = nullptr;
+					sig = orig_sig;
+					blocked = 0;
 				}
 			}
 		};
@@ -65,7 +116,7 @@ namespace fteng
 		sig_base::~sig_base()
 		{
 			for (conn_base* c : conns)
-				if (c) c->sig = nullptr;
+				if (c) c->set_sig(nullptr);
 		}
 
 		sig_base::sig_base(sig_base&& other) noexcept
@@ -75,7 +126,7 @@ namespace fteng
 			, dirty(other.dirty)
 		{
 			for (conn_base* c : conns)
-				if (c) c->sig = this;
+				if (c) c->set_sig(this);
 		}
 
 		sig_base& sig_base::operator= (sig_base&& other) noexcept
@@ -85,10 +136,9 @@ namespace fteng
 			calling = other.calling;
 			dirty = other.dirty;
 			for (conn_base* c : conns)
-				if (c) c->sig = this;
+				if (c) c->set_sig(this);
 			return *this;
 		}
-
 	}
 	
 	template<typename F> struct signal;
@@ -101,6 +151,16 @@ namespace fteng
 		{
 			delete ptr;
 			ptr = nullptr;
+		}
+
+		void block()
+		{
+			ptr->block();
+		}
+
+		void unblock()
+		{
+			ptr->unblock();
 		}
 
 		connection() = default;
