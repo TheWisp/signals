@@ -45,10 +45,13 @@ namespace fteng
 				blocked_connection* blocked_conn;
 			};
 			
-			size_t          idx : 31;
-			size_t          blocked : 1;
+			size_t          idx;
 
-			conn_base(const sig_base* sig, size_t idx) : sig(sig), idx(idx), blocked(0) {}
+			// space can be optimized by stealing bits from index as it's impossible to support max uint64 number of slots
+			bool blocked = false;
+			bool owned = false;
+
+			conn_base(const sig_base* sig, size_t idx) : sig(sig), idx(idx) {}
 
 			virtual ~conn_base()
 			{
@@ -116,7 +119,15 @@ namespace fteng
 		sig_base::~sig_base()
 		{
 			for (conn_base* c : conns)
-				if (c) c->set_sig(nullptr);
+			{
+				if (c) 
+				{
+					if (c->owned)
+						c->set_sig(nullptr);
+					else
+						delete c;
+				}
+			}
 		}
 
 		sig_base::sig_base(sig_base&& other) noexcept
@@ -143,7 +154,13 @@ namespace fteng
 	
 	template<typename F> struct signal;
 
-	struct [[nodiscard]] connection
+	// A connection without auto disconnection
+	struct connection_raw
+	{
+		details::conn_base* ptr = nullptr;
+	};
+
+	struct connection
 	{
 		details::conn_base* ptr = nullptr;
 
@@ -185,6 +202,11 @@ namespace fteng
 			ptr = other.ptr;
 			other.ptr = nullptr;
 			return *this;
+		}
+
+		connection(connection_raw conn) : ptr(conn.ptr)
+		{
+			ptr->owned = true;
 		}
 	};
 
@@ -233,7 +255,7 @@ namespace fteng
 		}
 
 		template<auto PMF, class C>
-		[[nodiscard]] connection connect(C* object) const
+		connection_raw connect(C* object) const
 		{
 			size_t idx = conns.size();
 			auto& call = calls.emplace_back();
@@ -241,27 +263,27 @@ namespace fteng
 			call.func = reinterpret_cast<void*>(+[](void* obj, A ... args) {((*reinterpret_cast<C**>(obj))->*PMF)(args...); });
 			details::conn_base* conn = new details::conn_base(this, idx);
 			conns.emplace_back(conn);
-			return make_connection(conn);
+			return { conn };
 		}
 
 		template<auto func>
-		[[nodiscard]] connection connect() const
+		connection_raw connect() const
 		{
 			return connect(func);
 		}
 
-		[[nodiscard]] connection connect(void(*func)(A...)) const
+		connection_raw connect(void(*func)(A...)) const
 		{
 			size_t idx = conns.size();
 			auto& call = calls.emplace_back();
 			call.func = reinterpret_cast<void*>(func);
 			details::conn_base* conn = new details::conn_base(this, idx);
 			conns.emplace_back(conn);
-			return make_connection(conn);
+			return { conn };
 		}
 
 		template<typename F>
-		[[nodiscard]] connection connect(F functor) const
+		connection_raw connect(F functor) const
 		{
 			if constexpr (std::is_convertible_v<F, void(*)(A...)>)
 			{
@@ -277,7 +299,7 @@ namespace fteng
 				using conn_t = std::conditional_t<std::is_trivially_destructible_v<F>, details::conn_base, details::conn_nontrivial<F>>;
 				details::conn_base* conn = new conn_t(this, idx);
 				conns.emplace_back(conn);
-				return make_connection(conn);
+				return { conn };
 			}
 			else
 			{
@@ -299,17 +321,8 @@ namespace fteng
 				new (&call.object) unique{ new F(functor) };
 				details::conn_base* conn = new details::conn_nontrivial<unique>(this, idx);
 				conns.emplace_back(conn);
-				return make_connection(conn);
+				return { conn };
 			}
-		}
-
-	private:
-
-		inline static connection make_connection(details::conn_base* ptr) 
-		{
-			connection conn;
-			conn.ptr = ptr;
-			return conn;
 		}
 	};
 }

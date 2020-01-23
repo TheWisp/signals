@@ -151,6 +151,12 @@ namespace LambdaTest
 		conn = sig.connect(large_lambda_2);
 		sig(32);
 		assert(x == 35);
+
+		//generic lambda test
+		conn = sig.connect([](auto&& ...a) 
+			{
+				static_assert(sizeof... (a) == 1);
+			});
 	}
 }
 
@@ -188,6 +194,15 @@ void test()
 		assert(bar.total == 3.14f);
 		foo.sig(3.14f);
 		assert(bar.total == 6.28f);
+	}
+
+	//basic usage, not saving connection
+	{
+		signal<void(int)> sig;
+		int x = 0;
+		sig.connect([&](int y) { x += y; });
+		sig(3);
+		assert(x == 3);
 	}
 
 	//scope safety (connection)
