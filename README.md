@@ -40,15 +40,18 @@ int main()
 {
 	fteng::signal<void(float delta)> update;
 
-	//connects a lambda callback
-	update.connect([](float delta) { std::cout << "This is a lambda callback"; });
-
 	//connects a function callback
 	update.connect(on_update);
 
 	//connects an object's member function
 	my_class* my_obj = new my_class;
 	update.connect<&my_class::on_update>(my_obj);
+
+	//connects a lambda callback
+	update.connect([](float delta) { std::cout << "This is a lambda callback"; });
+
+	//connects a generic lambda callback
+	update.connect([](auto&&... as) { std::cout << "This is a generic lambda callback"; });
 
 	//emit
 	update(3.14f);
@@ -67,21 +70,24 @@ fteng::signal<void(const game& instance)> game_created;
 class subsystem
 {
 	//Connects a signal with a lambda capturing 'this'
-	//Saves the connection which gets destructed when this object is deleted.
+	//Automatically disconnects from the signal when this object gets deleted.
 	fteng::connection on_game_created = game_created.connect([this](const game& instance)
 	{
 		std::cout << "Game is created, now we can create other systems!\n";
 	});
 
 	//Connects a signal with a member function
-	//Saves the connection which gets destructed when this object is deleted.
+	//Automatically disconnects from the signal when this object gets deleted.
 	fteng::connection on_game_created2 = game_created.connect<&subsystem::on_game_created_method>(this);
 	void on_game_created_method(const game& instance)
 	{
 		std::cout << "Game is created, now we can create other systems!\n";
+
+		//disconnects from the signal
+		on_game_created2.disconnect();
 	};
 };
-static subsystem subsystem1;
+static subsystem subsystem_instance;
 
 // Somewhere else
 int main()
@@ -89,6 +95,49 @@ int main()
 	game game_instance;
 	game_created(game_instance); //notifies each subsystem
 }
+```
+
+### Connecting / Disconnecting from Callback
+```cpp
+fteng::signal<void(entity eid)> entity_created;
+
+class A
+{
+	std::unique_ptr<B> b;
+
+	fteng::connection on_entity_created = entity_created.connect([this](entity eid)
+	{
+		// Creates a 'B' which also connects to the signal.
+		// It's fine to connect more objects to the signal during the callback, 
+		// With a caveat that it won't be notified this time (but will be notified next time).
+		b = std::make_unique<B>(); 
+	})
+};
+
+class B
+{
+	// C is some class that also listens to entity_created
+	std::vector<C*> cs;
+
+	fteng::connection on_entity_created = entity_created.connect([this](entity eid)
+	{
+		/* ... */
+		if (eid == some_known_eid){
+
+			// Imagine this operation would automatically disconnect all the C objects from entity_created
+			// It's fine to disconnect any object from the signal during the callback, no matter if it's
+			// the object being called back or any other object. The disconnected object is skipped afterwards.
+			for (C* c : cs) 
+				delete c;
+
+			// Also fine
+			on_entity_created.disconnect();
+
+			// Also fine - Don't do this in modern C++ though ...
+			delete this;
+		}
+	})
+};
 ```
 
 ## Benchmark
