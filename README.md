@@ -66,7 +66,7 @@ This is due to the non-intrusiveness design and it being as close to 0-cost as p
 See `Connection Management` for how to automatically disconnect the receivers.
 ```cpp
 class button{
-  public: signal<void(button& btn, bool down)> pressed;
+  public: fteng::signal<void(button& btn, bool down)> pressed;
 };
 
 class my_special_frame {
