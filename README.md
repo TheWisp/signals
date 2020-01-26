@@ -21,43 +21,66 @@ In a dynamic world, receivers (slots) are often frequently created and destroyed
 Just like direct function calls, recursions can naturally emerge from complex and dynamic behaviors. Furthermore, the signals and slots may be side-effected by their own results!
 
 ## Usage
-Include the single header, `signals.hpp`.
+Simply include the single header, `signals.hpp`.
 
-### Basic Usage
+### Basics
+The following example demonstrates how to define, connect and emit a signal.
+
 ```cpp
-void on_update(float delta)
-{
-	std::cout << "This is a function callback";
-}
+// A function callback
+void on_update(float delta) { }
 
-class my_class
-{
-public:
-	void on_update(float delta){ std::cout << "This is a member function callback"; }
+// A member function callback
+class my_class{
+  void on_update(float delta) { }
 };
 
 int main()
 {
-	fteng::signal<void(float delta)> update;
+  // A signal specifying its signature in the template parameter
+  fteng::signal<void(float delta)> update;
 
-	//connects a function callback
-	update.connect(on_update);
+  // Connects to a function callback
+  update.connect(on_update);
 
-	//connects an object's member function
-	my_class* my_obj = new my_class;
-	update.connect<&my_class::on_update>(my_obj);
+  // Connects to an object's member function
+  my_class* my_obj = new my_class;
+  update.connect<&my_class::on_update>(my_obj);
 
-	//connects a lambda callback
-	update.connect([](float delta) { std::cout << "This is a lambda callback"; });
+  // Connects to a lambda callback
+  update.connect([](float delta) { });
 
-	//connects a generic lambda callback
-	update.connect([](auto&&... as) { std::cout << "This is a generic lambda callback"; });
+  // Connects to a generic lambda callback
+  update.connect([](auto&&... as) { });
 
-	//emit
-	update(3.14f);
+  // Emits the signal
+  update(3.14f);
 
-	delete my_obj;
+  delete my_obj;
 }
+```
+
+Signals automatically disconnect their receivers (slots) upon destruction.
+IMPORTANT NOTE: Receivers don't automatically disconnect from the signal when they go out of scope. 
+This is due to the non-intrusiveness design and it being as close to 0-cost as possible.
+See `Connection Management` for how to automatically disconnect the receivers.
+```cpp
+class button{
+  public: signal<void(button& btn, bool down)> pressed;
+};
+
+class my_special_frame {
+  std::vector<button> buttons;
+
+  my_special_frame() {
+      buttons.emplace_back();
+      buttons.back().pressed.connect<&my_special_frame::on_button_pressed>(this);
+  }
+
+  void on_button_pressed(button& btn, bool down) {
+    /* ... */
+  }
+};
 ```
 
 ### Connection Management
@@ -69,31 +92,31 @@ fteng::signal<void(const game& instance)> game_created;
 // subsystem.cpp
 class subsystem
 {
-	//Connects a signal with a lambda capturing 'this'
-	//Automatically disconnects from the signal when this object gets deleted.
-	fteng::connection on_game_created = game_created.connect([this](const game& instance)
-	{
-		std::cout << "Game is created, now we can create other systems!\n";
-	});
+  //Connects a signal with a lambda capturing 'this'
+  //Automatically disconnects from the signal when this object gets deleted.
+  fteng::connection on_game_created = game_created.connect([this](const game& instance)
+  {
+    std::cout << "Game is created, now we can create other systems!\n";
+  });
 
-	//Connects a signal with a member function
-	//Automatically disconnects from the signal when this object gets deleted.
-	fteng::connection on_game_created2 = game_created.connect<&subsystem::on_game_created_method>(this);
-	void on_game_created_method(const game& instance)
-	{
-		std::cout << "Game is created, now we can create other systems!\n";
+  //Connects a signal with a member function
+  //Automatically disconnects from the signal when this object gets deleted.
+  fteng::connection on_game_created2 = game_created.connect<&subsystem::on_game_created_method>(this);
+  void on_game_created_method(const game& instance)
+  {
+    std::cout << "Game is created, now we can create other systems!\n";
 
-		//disconnects from the signal
-		on_game_created2.disconnect();
-	};
+    //disconnects from the signal
+    on_game_created2.disconnect();
+  };
 };
 static subsystem subsystem_instance;
 
 // Somewhere else
 int main()
 {
-	game game_instance;
-	game_created(game_instance); //notifies each subsystem
+  game game_instance;
+  game_created(game_instance); //notifies each subsystem
 }
 ```
 
@@ -103,40 +126,40 @@ fteng::signal<void(entity eid)> entity_created;
 
 class A
 {
-	std::unique_ptr<B> b;
+  std::unique_ptr<B> b;
 
-	fteng::connection on_entity_created = entity_created.connect([this](entity eid)
-	{
-		// Creates a 'B' which also connects to the signal.
-		// It's fine to connect more objects to the signal during the callback, 
-		// With a caveat that it won't be notified this time (but will be notified next time).
-		b = std::make_unique<B>(); 
-	})
+  fteng::connection on_entity_created = entity_created.connect([this](entity eid)
+  {
+    // Creates a 'B' which also connects to the signal.
+    // It's fine to connect more objects to the signal during the callback, 
+    // With a caveat that it won't be notified this time (but will be notified next time).
+    b = std::make_unique<B>(); 
+  })
 };
 
 class B
 {
-	// C is some class that also listens to entity_created
-	std::vector<C*> cs;
+  // C is some class that also listens to entity_created
+  std::vector<C*> cs;
 
-	fteng::connection on_entity_created = entity_created.connect([this](entity eid)
-	{
-		/* ... */
-		if (eid == some_known_eid){
+  fteng::connection on_entity_created = entity_created.connect([this](entity eid)
+  {
+    /* ... */
+    if (eid == some_known_eid){
 
-			// Imagine this operation would automatically disconnect all the C objects from entity_created
-			// It's fine to disconnect any object from the signal during the callback, no matter if it's
-			// the object being called back or any other object. The disconnected object is skipped afterwards.
-			for (C* c : cs) 
-				delete c;
+      // Imagine this operation automatically disconnects all C objects from entity_created
+      // It's fine to disconnect any object from the signal during the callback, no matter if it's
+      // the object being called back or any other object. The disconnected objects are skipped over.
+      for (C* c : cs) 
+        delete c;
 
-			// Also fine
-			on_entity_created.disconnect();
+      // Also fine
+      on_entity_created.disconnect();
 
-			// Also fine - Don't do this in modern C++ though ...
-			delete this;
-		}
-	})
+      // Also fine - Don't do this in modern C++ though ...
+      delete this;
+    }
+  })
 };
 ```
 
