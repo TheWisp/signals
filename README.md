@@ -60,7 +60,8 @@ int main()
 }
 ```
 
-Signals automatically disconnect their receivers (slots) upon destruction.
+Signals automatically disconnect from their receivers (slots) upon destruction.
+
 IMPORTANT NOTE: Receivers don't automatically disconnect from the signal when they go out of scope. 
 This is due to the non-intrusiveness design and it being as close to 0-cost as possible.
 See `Connection Management` for how to automatically disconnect the receivers.
@@ -88,39 +89,44 @@ The `connect()` method returns an unmanaged (raw) connection, which may be conve
 It is recommended to save this connection into the receiver's structure in order to automatically disconnect from the signal in an RAII fashion.
 
 ```cpp
-// game.h
 class game { /*...*/ };
 fteng::signal<void(const game& instance)> game_created;
 
-// subsystem.cpp
+int main()
+{
+  game game_instance;
+  game_created(game_instance); //notifies each subsystem
+}
+```
+
+The following design would automatically disconnect from the signal when the object gets deleted.
+
+```cpp
 class subsystem
 {
   //Connects a signal with a lambda capturing 'this'
-  //Automatically disconnects from the signal when this object gets deleted.
   fteng::connection on_game_created = game_created.connect([this](const game& instance)
   {
     std::cout << "Game is created, now we can create other systems!\n";
   });
+};
+static subsystem subsystem_instance;
+```
 
+Alternatively, you may use a member function for callback.
+
+```cpp
+class subsystem
+{
   //Connects a signal with a member function
   //Automatically disconnects from the signal when this object gets deleted.
   fteng::connection on_game_created2 = game_created.connect<&subsystem::on_game_created_method>(this);
   void on_game_created_method(const game& instance)
   {
     std::cout << "Game is created, now we can create other systems!\n";
-
-    //disconnects from the signal
-    on_game_created2.disconnect();
   };
 };
 static subsystem subsystem_instance;
-
-// Somewhere else
-int main()
-{
-  game game_instance;
-  game_created(game_instance); //notifies each subsystem
-}
 ```
 
 ### Connecting / Disconnecting from Callback
