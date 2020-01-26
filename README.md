@@ -73,8 +73,8 @@ class my_special_frame {
   std::vector<button> buttons;
 
   my_special_frame() {
-      buttons.emplace_back();
-      buttons.back().pressed.connect<&my_special_frame::on_button_pressed>(this);
+    buttons.emplace_back();
+    buttons.back().pressed.connect<&my_special_frame::on_button_pressed>(this);
   }
 
   void on_button_pressed(button& btn, bool down) {
@@ -84,6 +84,9 @@ class my_special_frame {
 ```
 
 ### Connection Management
+The `connect()` method returns an unmanaged (raw) connection, which may be converted to a `fteng::connection` representing the unique ownership.
+It is recommended to save this connection into the receiver's structure in order to automatically disconnect from the signal in an RAII fashion.
+
 ```cpp
 // game.h
 class game { /*...*/ };
