@@ -140,7 +140,7 @@ A few important notes about the `connection` object:
 - If the signal can outlive the slots, store the `connection` in the slot's structure so that it disconnects the signal automatically.
 
 ### Connecting / Disconnecting Slots from Callback
-Sometimes during the callback, we might want to disconnect the slot from the signal. There are also cases where we want to create or destroy other objects, who just happen to observe the same signal that triggered the callback. The following examples demonstrates how these usage are supported by the library.
+Sometimes during the callback, we might want to disconnect the slot from the signal. There are also cases where we want to create or destroy other objects, who just happen to observe the same signal that triggered the callback. The following example demonstrates how these usage are supported by the library.
 ```cpp
 fteng::signal<void(entity eid)> entity_created;
 

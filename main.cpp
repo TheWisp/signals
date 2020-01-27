@@ -157,6 +157,12 @@ namespace LambdaTest
 			{
 				static_assert(sizeof... (a) == 1);
 			});
+
+		//captured 0-memory lambda test
+		conn = sig.connect([y = 0](int count) mutable {
+			y += count; //no sideeffect, but should work
+		});
+		sig(10);
 	}
 }
 
@@ -179,6 +185,27 @@ namespace BlockingConnection
 		assert(x == 33);
 		sig(33);
 		assert(x == 66);
+	}
+}
+
+namespace FunctorTest
+{
+	struct Functor
+	{
+		int val = 0;
+		void operator()(int x)
+		{
+			val += x;
+		}
+	};
+
+	void test()
+	{
+		Functor o;
+		signal<void(int)> sig;
+		sig.connect(o);
+		sig(10);
+		assert(o.val == 10);
 	}
 }
 
@@ -236,6 +263,9 @@ void test()
 
 	//blocking connection
 	BlockingConnection::test();
+
+	//lambda and functor instance test
+	FunctorTest::test();
 }
 
 namespace Bench
