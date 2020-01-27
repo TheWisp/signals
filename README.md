@@ -100,15 +100,21 @@ class subsystem
   //Connects a signal with a lambda capturing 'this'
   fteng::connection on_game_created = game_created.connect([this](const game& instance)
   {
-    std::cout << "Game is created, now we can create other systems!\n";
+    std::cout << "Game is created!\n";
   });
 };
-static subsystem subsystem_instance;
 
 int main()
 {
+  subsystem* sys1 = new subsystem;
+
   game game_instance;
-  game_created(game_instance); //notifies each subsystem
+  game_created(game_instance); // Notifies each subsystem
+
+  delete sys1; // Automatically disconnects from the signal
+
+  game game_instance2;
+  game_created(game_instance2); // Notifies each subsystem. Should not crash.
 }
 ```
 
