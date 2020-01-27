@@ -5,6 +5,8 @@ This library is optimized for video games (and probably other low-latency applic
 
 There are many similar libraries - such as [jl_signal](http://hoyvinglavin.com/2012/08/06/jl_signal/), [nuclex signal/slots](http://blog.nuclex-games.com/2019/10/nuclex-signal-slot-benchmarks/) and [several dozens more](https://github.com/NoAvailableAlias/signal-slot-benchmarks). My work is based on a previous [research](https://github.com/TheWisp/ImpossiblyFastEventCPP17) which focused on the syntax and performance improvements brought by a C++17 feature - `template<auto>`. This library is a combination of modern C++ exploration, system programming and data-structure design. It aims to become feature-complete like `boost::signals`, yet extremely light-weight - both run time and memory footprint - in order to replace _interface_ or `std::function` based callbacks.
 
+`signal` emission is **faster** than virtual function calls. Compared to virtual calls, `signal` calls only take between 22% and 77% of the time, depending on the number and the level of randomness of classes and objects.
+
 ## Design Choices
 
 ### Direct (Blocking) Calls
@@ -100,7 +102,7 @@ class subsystem
   //Connects a signal with a lambda capturing 'this'
   fteng::connection on_game_created = game_created.connect([this](const game& instance)
   {
-    std::cout << "Game is created!\n";
+    std::cout << "Game is created.\n";
   });
 };
 
@@ -128,7 +130,7 @@ class subsystem
 
   void on_game_created_method(const game& instance)
   {
-    std::cout << "Game is created, now we can create other systems!\n";
+    std::cout << "Game is created.\n";
   };
 };
 ```
@@ -198,7 +200,16 @@ class Foo
 };
 ```
 
-## Benchmark
+## Performance Benchmark
+With a little help of template metaprogramming, I've generated classes of different virtual tables (even though small vtable with just 2 methods).
+
+The bottleneck of emission is the cache loading, therefore it makes sense to test different scenarios depending on object memory addresses and class vtable addresses.
+If the objects being called are nicely aligned in the memory, we could expect a speed-up from the cache coherence. Similarly, if all objects are from the same class,
+their virtual methods would be the same and therefore a speed-up. In the benchmark, I've tested 4 scenarios where each creates 100,000 objects from at most 100 different classes:
+- SAME class, SEQUENTIAL objects: all objects are instances of the same class, and are contiguous in the memory.
+- SAME class, RANDOM objects: all objects are instancess of the same class, but are randomly scattered in the memory.
+- RANDOM class, SEQUENTIAL objects: each object's class is one of 100 possible classes, but they are contiguous in the memory.
+- RANDOM class, RANDOM objects: each object's class is one of 100 possible classes, and they are randomly scattered in the memory.
 
 Xeon E3-1275 V2 @ 3.90 GHz 16.0 GB RAM
 
