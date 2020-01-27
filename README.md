@@ -15,7 +15,7 @@ No thread safety overhead
 Latency is the bottleneck.
 
 ### O(1) Connection and Disconnection
-In a dynamic world, receivers (slots) are often frequently created and destroyed. A linear search removal algorithm can easily become the performance bottleneck, especially when a large number of slots all disconnect at the same time. Removing by swapping with the end mitigates the problem, but the overall time spent removing N slots with a linear search would still be O(N^2). In this library, a slot is removed by marking its index unused, which then gets skipped and cleaned up in the next emission. Benchmarks have shown that the overhead is dominated by memory accessing (cache misses), rather than checking for null (pipeline stalling).
+In a dynamic world, slots (receivers) are often frequently created and destroyed. A linear search removal algorithm can easily become the performance bottleneck, especially when a large number of slots all disconnect at the same time. Removing by swapping with the end mitigates the problem, but the overall time spent removing N slots with a linear search would still be O(N^2). In this library, a slot is removed by marking its index unused, which then gets skipped and cleaned up in the next emission. Benchmarks have shown that the overhead is dominated by memory accessing (cache misses), rather than checking for null (pipeline stalling).
 
 ### Safe Recursion and Modification While Iterating
 Just like direct function calls, recursions can naturally emerge from complex and dynamic behaviors. Furthermore, the signals and slots may be side-effected by their own results!
@@ -60,11 +60,7 @@ int main()
 }
 ```
 
-Signals automatically disconnect from their receivers (slots) upon destruction.
-
-IMPORTANT NOTE: Receivers don't automatically disconnect from the signal when they go out of scope. 
-This is due to the non-intrusiveness design and it being as close to 0-cost as possible.
-See `Connection Management` for how to automatically disconnect the receivers.
+Signals automatically disconnect from their slots (receivers) upon destruction.
 ```cpp
 class button{
   public: fteng::signal<void(button& btn, bool down)> pressed;
@@ -85,23 +81,18 @@ class my_special_frame {
 ```
 
 ### Connection Management
-The `connect()` method returns an unmanaged (raw) connection, which may be converted to a `fteng::connection` representing the unique ownership.
-It is recommended to save this connection into the receiver's structure in order to automatically disconnect from the signal in an RAII fashion.
+Slots don't automatically disconnect from the signal when they go out of scope. 
+This is due to the non-intrusive design and the "pay only for what you use" principle.
+
+To help automatically disconnect the slot, the `connect()` method returns an unmanaged (raw) connection, which may be converted to a `fteng::connection` representing the unique ownership.
+It is recommended to save this connection into the slot's structure in order to automatically disconnect from the signal in an RAII fashion.
+
+The following design would automatically disconnect the object from the signal when it is deleted.
 
 ```cpp
 class game { /*...*/ };
 fteng::signal<void(const game& instance)> game_created;
 
-int main()
-{
-  game game_instance;
-  game_created(game_instance); //notifies each subsystem
-}
-```
-
-The following design would automatically disconnect from the signal when the object gets deleted.
-
-```cpp
 class subsystem
 {
   //Connects a signal with a lambda capturing 'this'
@@ -111,6 +102,12 @@ class subsystem
   });
 };
 static subsystem subsystem_instance;
+
+int main()
+{
+  game game_instance;
+  game_created(game_instance); //notifies each subsystem
+}
 ```
 
 Alternatively, you may use a member function for callback.
@@ -119,17 +116,23 @@ Alternatively, you may use a member function for callback.
 class subsystem
 {
   //Connects a signal with a member function
-  //Automatically disconnects from the signal when this object gets deleted.
-  fteng::connection on_game_created2 = game_created.connect<&subsystem::on_game_created_method>(this);
+  fteng::connection on_game_created = game_created.connect<&subsystem::on_game_created_method>(this);
+
   void on_game_created_method(const game& instance)
   {
     std::cout << "Game is created, now we can create other systems!\n";
   };
 };
-static subsystem subsystem_instance;
 ```
 
-### Connecting / Disconnecting from Callback
+A few important notes about the `connection` object:
+- `connection` is default-constructible, moveable but not copyable.
+- Destroying the `connection` object would automatically disconnect the associated signal and slot.
+- If you know the slot outlives the signal, it's fine to connect them without saving the connection object. There won't be any memory leak.
+- If the signal can outlive the slots, store the `connection` in the slot's structure so that it disconnects the signal automatically.
+
+### Connecting / Disconnecting Slots from Callback
+Sometimes during the callback, we might want to disconnect the slot from the signal. There are also cases where we want to create or destroy other objects, who just happen to observe the same signal that triggered the callback. The following examples demonstrates how these usage are supported by the library.
 ```cpp
 fteng::signal<void(entity eid)> entity_created;
 
@@ -141,9 +144,9 @@ class A
   {
     // Creates a 'B' which also connects to the signal.
     // It's fine to connect more objects to the signal during the callback, 
-    // With a caveat that it won't be notified this time (but will be notified next time).
+    // With a caveat that they won't be notified this time (but next time).
     b = std::make_unique<B>(); 
-  })
+  });
 };
 
 class B
@@ -168,7 +171,22 @@ class B
       // Also fine - Don't do this in modern C++ though ...
       delete this;
     }
-  })
+  });
+};
+```
+
+### Blocking a Connection
+A connection can be temporarily disabled with `block()`, so that it won't be notified by the signal until it has been `unblock()` ed again.
+```cpp
+fteng::signal<void()> sig;
+
+class Foo
+{
+  fteng::connection conn = sig.connect([this](){
+    conn.block();
+    sig(); // Now this won't cause an infinite recursion.
+    conn.unblock();
+  });
 };
 ```
 
