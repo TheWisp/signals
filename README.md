@@ -22,6 +22,8 @@ Just like direct function calls, recursions can naturally emerge from complex an
 
 ## Usage
 Simply include the single header, `signals.hpp`.
+A C++17 compliant compiler is necessary.
+Give it a try on [Godbolt](https://godbolt.org/z/TKEaZ9)!
 
 ### Basics
 The following example demonstrates how to define, connect and emit a signal.
