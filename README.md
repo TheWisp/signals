@@ -11,7 +11,7 @@ There are many similar libraries - such as [jl_signal](http://hoyvinglavin.com/2
 
 ### Direct (Blocking) Calls
 In game systems, the logic flow often consists of many fast and weakly ordered function calls. 
-No thread safety overhead
+Asynchronous calls are rather the exceptions than the default. Thread-safe calls add additional costs, thus should be the exceptions rather than the default.
 
 ### Optimized for Emission
 Latency is the bottleneck.
