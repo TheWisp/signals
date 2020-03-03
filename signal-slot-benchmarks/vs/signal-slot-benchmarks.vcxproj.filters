@@ -1,0 +1,679 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Text Files">
+      <UniqueIdentifier>{f28540f5-b7a3-406e-8bd6-e54ba5da51ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\lib">
+      <UniqueIdentifier>{82a6d24a-0c91-4032-bdc5-e9272cd5bb58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lib">
+      <UniqueIdentifier>{a551118d-18c1-4d91-8c21-84b2b4f36207}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\benchmark">
+      <UniqueIdentifier>{3c9c3a81-872f-4190-9b9e-68e75876b3a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\benchmark">
+      <UniqueIdentifier>{439e99ff-4ff8-46d3-9d3a-b350845d379b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\lib\amc522">
+      <UniqueIdentifier>{a355ee74-fa6e-45c5-91b3-4b226fdde371}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\lib\cpp11nullptr">
+      <UniqueIdentifier>{879f44ca-ebef-4088-ae0b-c385785b5a73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\lib\eviltwin">
+      <UniqueIdentifier>{722a55ff-cdc7-4165-bf5d-2d0d25333029}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\lib\fr00b0">
+      <UniqueIdentifier>{f62ab90f-5790-4a1f-8518-cf12f5254866}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\lib\jeffomatic">
+      <UniqueIdentifier>{73bb6b99-5746-48b7-9d28-de11cec9aa57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\lib\joanrieu">
+      <UniqueIdentifier>{3b168fc8-d224-49d1-ae36-df690bf47331}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\lib\Kosta-Github">
+      <UniqueIdentifier>{4ebf72f5-8068-4199-8cf6-17dba3752371}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\lib\miguelmartin">
+      <UniqueIdentifier>{9fce1006-d2ad-4e36-ae0f-b90c068a67e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\lib\mwthinker">
+      <UniqueIdentifier>{3ed32c9c-ee9c-4b8f-8e02-878a30a36fae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\lib\supergrover">
+      <UniqueIdentifier>{400093d1-63f3-4d63-b9ad-d9032021fa71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\lib\yassi">
+      <UniqueIdentifier>{680b0203-6e96-4e29-8342-5c648afa7efc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\lib\palacaze">
+      <UniqueIdentifier>{351e7377-55df-4fb1-a2bf-4e3efee924e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\lib\pbhogan">
+      <UniqueIdentifier>{82de5016-a5a3-430d-9585-8785661b5e4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\lib\vdksoft">
+      <UniqueIdentifier>{a07acbb1-6f7d-473e-a24f-dd29bad90021}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\lib\NoAvailableAlias">
+      <UniqueIdentifier>{27058148-931c-4a62-bae4-47d273a85c1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lib\jeffomatic">
+      <UniqueIdentifier>{5cf46310-3ff8-4b80-9d33-ac833c3daa41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lib\mwthinker">
+      <UniqueIdentifier>{5b659186-a028-4965-b686-748f3ea0cf05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lib\supergrover">
+      <UniqueIdentifier>{a4d79bc9-33f9-4a93-87eb-3cc37f31d235}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\lib\Montellese">
+      <UniqueIdentifier>{50351168-ba4c-48c2-b6be-1b53534d6a6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Text Files\results_gcc">
+      <UniqueIdentifier>{92dfdadb-0d96-4a4b-a513-049886b195b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Text Files\results_msvc">
+      <UniqueIdentifier>{138d3b75-58f0-4ede-bd98-5d198606b587}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\lib\i42output">
+      <UniqueIdentifier>{69581605-a8ae-41b1-af56-78cb5fe64a6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\lib\larspensjo">
+      <UniqueIdentifier>{ed5f2b2a-69b4-4d8d-b4f6-91cb6c9131ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\lib\dacap">
+      <UniqueIdentifier>{f422df3c-837c-4775-80a1-d1a8933f62de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lib\dacap">
+      <UniqueIdentifier>{f85242f7-c2be-4753-af27-b974f0afaa25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\lib\Ansoulom">
+      <UniqueIdentifier>{686f5e9a-8b4a-4e83-99e3-de27328ed336}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lib\i42output">
+      <UniqueIdentifier>{df805c2b-4296-4403-97ce-9201eaa212e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lib\CppFakeIt">
+      <UniqueIdentifier>{953945f2-4e40-4ed8-8bd2-70215ac118f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\lib\CppFakeIt">
+      <UniqueIdentifier>{408ef3ff-0f4d-47a0-9622-59a2248a9b40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\lib\copperspice">
+      <UniqueIdentifier>{334eb96f-b53d-46cf-aafd-e1a6027a8b4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lib\copperspice">
+      <UniqueIdentifier>{d2a37173-b19a-484a-8de5-147939f14671}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\lib\NoAvailableAlias\nano-signal-slot">
+      <UniqueIdentifier>{f34fa47b-d65c-44c8-88ca-c263e6b6f966}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\lib\Nuclex">
+      <UniqueIdentifier>{ba195d59-4f67-430e-b9aa-d4f331e9cc95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\lib\fteng">
+      <UniqueIdentifier>{c466c8d1-887f-46f9-afa6-59847e836a79}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\benchmark\hpp\benchmark_asg.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_cls.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_evl.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_jls.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_jos.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_ksc.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_mws.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_nod.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_psg.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_pss.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_pss_st.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_sss.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_vdk.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_wnk.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_yas.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark_utility.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\amc522\signal11\Signal.h">
+      <Filter>Header Files\lib\amc522</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\cpp11nullptr\lsignal\lsignal.h">
+      <Filter>Header Files\lib\cpp11nullptr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\eviltwin\observer.hpp">
+      <Filter>Header Files\lib\eviltwin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\fr00b0\nod\include\nod\nod.hpp">
+      <Filter>Header Files\lib\fr00b0</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\jeffomatic\jl_signal\src\Signal.h">
+      <Filter>Header Files\lib\jeffomatic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\joanrieu\signal11\signal11.h">
+      <Filter>Header Files\lib\joanrieu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\Kosta-Github\signals-cpp\signals-cpp\config.hpp">
+      <Filter>Header Files\lib\Kosta-Github</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\Kosta-Github\signals-cpp\signals-cpp\connection.hpp">
+      <Filter>Header Files\lib\Kosta-Github</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\Kosta-Github\signals-cpp\signals-cpp\connections.hpp">
+      <Filter>Header Files\lib\Kosta-Github</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\Kosta-Github\signals-cpp\signals-cpp\signal.hpp">
+      <Filter>Header Files\lib\Kosta-Github</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\Kosta-Github\signals-cpp\signals-cpp\signals.hpp">
+      <Filter>Header Files\lib\Kosta-Github</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\jeffomatic\jl_signal\src\DoublyLinkedList.h">
+      <Filter>Header Files\lib\jeffomatic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\jeffomatic\jl_signal\src\FastDelegate.h">
+      <Filter>Header Files\lib\jeffomatic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\jeffomatic\jl_signal\src\ObjectPool.h">
+      <Filter>Header Files\lib\jeffomatic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\jeffomatic\jl_signal\src\ObjectPoolScopedAllocator.h">
+      <Filter>Header Files\lib\jeffomatic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\jeffomatic\jl_signal\src\ScopedAllocator.h">
+      <Filter>Header Files\lib\jeffomatic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\jeffomatic\jl_signal\src\SignalBase.h">
+      <Filter>Header Files\lib\jeffomatic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\jeffomatic\jl_signal\src\SignalDefinitions.h">
+      <Filter>Header Files\lib\jeffomatic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\jeffomatic\jl_signal\src\StaticSignalConnectionAllocators.h">
+      <Filter>Header Files\lib\jeffomatic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\jeffomatic\jl_signal\src\Utils.h">
+      <Filter>Header Files\lib\jeffomatic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\miguelmartin\Wink-Signals\wink\event_queue.hpp">
+      <Filter>Header Files\lib\miguelmartin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\miguelmartin\Wink-Signals\wink\signal.hpp">
+      <Filter>Header Files\lib\miguelmartin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\miguelmartin\Wink-Signals\wink\slot.hpp">
+      <Filter>Header Files\lib\miguelmartin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\mwthinker\Signal\src\mw\signals\connection.h">
+      <Filter>Header Files\lib\mwthinker</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\mwthinker\Signal\src\mw\signal.h">
+      <Filter>Header Files\lib\mwthinker</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\pbhogan\Signals\Delegate.h">
+      <Filter>Header Files\lib\pbhogan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\pbhogan\Signals\Signal.h">
+      <Filter>Header Files\lib\pbhogan</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\supergrover\sigslot\src\signal.h">
+      <Filter>Header Files\lib\supergrover</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\vdksoft\signals\include\signals.h">
+      <Filter>Header Files\lib\vdksoft</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\yassi\yassi.h">
+      <Filter>Header Files\lib\yassi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_bs2.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\Montellese\cpp-signal\cpp-signal.h">
+      <Filter>Header Files\lib\Montellese</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_cps.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\i42output\include\neolib\signal.hpp">
+      <Filter>Header Files\lib\i42output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_nls.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\i42output\include\neolib\neolib.hpp">
+      <Filter>Header Files\lib\i42output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\i42output\include\neolib\slot.hpp">
+      <Filter>Header Files\lib\i42output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\i42output\include\neolib\locking_policy.hpp">
+      <Filter>Header Files\lib\i42output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\i42output\include\neolib\mutex.hpp">
+      <Filter>Header Files\lib\i42output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_nls_st.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_cps_st.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\larspensjo\SimpleSignal\SimpleSignal.h">
+      <Filter>Header Files\lib\larspensjo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_lss.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_dob.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\dacap\obs\observable.h">
+      <Filter>Header Files\lib\dacap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\dacap\obs\observers.h">
+      <Filter>Header Files\lib\dacap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\dacap\obs\safe_list.h">
+      <Filter>Header Files\lib\dacap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\dacap\obs\slot.h">
+      <Filter>Header Files\lib\dacap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\dacap\obs\dacap_connection.h">
+      <Filter>Header Files\lib\dacap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\dacap\obs\dacap_signal.h">
+      <Filter>Header Files\lib\dacap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_aco.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\Ansoulom\cpp-observe\cpp_observe.hpp">
+      <Filter>Header Files\lib\Ansoulom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\i42output\include\neolib\lifetime.hpp">
+      <Filter>Header Files\lib\i42output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\i42output\include\neolib\allocator.hpp">
+      <Filter>Header Files\lib\i42output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\i42output\include\neolib\i_lifetime.hpp">
+      <Filter>Header Files\lib\i42output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\i42output\include\neolib\memory.hpp">
+      <Filter>Header Files\lib\i42output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\i42output\include\neolib\detail_memory.hpp">
+      <Filter>Header Files\lib\i42output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\i42output\include\neolib\event.hpp">
+      <Filter>Header Files\lib\i42output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\i42output\include\neolib\async_task.hpp">
+      <Filter>Header Files\lib\i42output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\i42output\include\neolib\timer.hpp">
+      <Filter>Header Files\lib\i42output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\i42output\include\neolib\i_thread.hpp">
+      <Filter>Header Files\lib\i42output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\i42output\include\neolib\message_queue.hpp">
+      <Filter>Header Files\lib\i42output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\i42output\include\neolib\task.hpp">
+      <Filter>Header Files\lib\i42output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\i42output\include\neolib\i_task.hpp">
+      <Filter>Header Files\lib\i42output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\i42output\include\neolib\noncopyable.hpp">
+      <Filter>Header Files\lib\i42output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\i42output\include\neolib\thread.hpp">
+      <Filter>Header Files\lib\i42output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\i42output\include\neolib\win32_message_queue.hpp">
+      <Filter>Header Files\lib\i42output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\i42output\include\neolib\lockable.hpp">
+      <Filter>Header Files\lib\i42output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\i42output\include\neolib\waitable.hpp">
+      <Filter>Header Files\lib\i42output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\i42output\include\neolib\waitable_event.hpp">
+      <Filter>Header Files\lib\i42output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\i42output\include\neolib\variant.hpp">
+      <Filter>Header Files\lib\i42output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\i42output\include\neolib\async_thread.hpp">
+      <Filter>Header Files\lib\i42output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\i42output\include\neolib\singleton.hpp">
+      <Filter>Header Files\lib\i42output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_nod_st.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\CppFakeIt\libfastsignals\include\bind_weak.h">
+      <Filter>Header Files\lib\CppFakeIt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\CppFakeIt\libfastsignals\include\combiners.h">
+      <Filter>Header Files\lib\CppFakeIt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\CppFakeIt\libfastsignals\include\function.h">
+      <Filter>Header Files\lib\CppFakeIt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\CppFakeIt\libfastsignals\include\function_detail.h">
+      <Filter>Header Files\lib\CppFakeIt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\CppFakeIt\libfastsignals\include\signal.h">
+      <Filter>Header Files\lib\CppFakeIt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\CppFakeIt\libfastsignals\include\signal_impl.h">
+      <Filter>Header Files\lib\CppFakeIt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\CppFakeIt\libfastsignals\include\spin_mutex.h">
+      <Filter>Header Files\lib\CppFakeIt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\CppFakeIt\libfastsignals\include\type_traits.h">
+      <Filter>Header Files\lib\CppFakeIt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_lfs.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\CppFakeIt\libfastsignals\include\lfs_connection.h">
+      <Filter>Header Files\lib\CppFakeIt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\i42output\include\neolib\raii.hpp">
+      <Filter>Header Files\lib\i42output</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\copperspice\cs_signal\src\cs_internal.h">
+      <Filter>Header Files\lib\copperspice</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\copperspice\cs_signal\src\cs_macro.h">
+      <Filter>Header Files\lib\copperspice</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\copperspice\cs_signal\src\cs_signal.h">
+      <Filter>Header Files\lib\copperspice</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\copperspice\cs_signal\src\cs_slot.h">
+      <Filter>Header Files\lib\copperspice</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\copperspice\cs_signal\src\rcu_guarded.hpp">
+      <Filter>Header Files\lib\copperspice</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\copperspice\cs_signal\src\rcu_list.hpp">
+      <Filter>Header Files\lib\copperspice</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_css.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\CppFakeIt\libfastsignals\include\msvc_autolink.h">
+      <Filter>Header Files\lib\CppFakeIt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\palacaze\sigslot\include\sigslot\signal.hpp">
+      <Filter>Header Files\lib\palacaze</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_nss_ts.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_nss_st.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_nss_tss.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\NoAvailableAlias\nano-signal-slot\nano_function.hpp">
+      <Filter>Header Files\lib\NoAvailableAlias\nano-signal-slot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\NoAvailableAlias\nano-signal-slot\nano_mutex.hpp">
+      <Filter>Header Files\lib\NoAvailableAlias\nano-signal-slot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\NoAvailableAlias\nano-signal-slot\nano_observer.hpp">
+      <Filter>Header Files\lib\NoAvailableAlias\nano-signal-slot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\NoAvailableAlias\nano-signal-slot\nano_signal_slot.hpp">
+      <Filter>Header Files\lib\NoAvailableAlias\nano-signal-slot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_nss_sts.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\Nuclex\Config.h">
+      <Filter>Header Files\lib\Nuclex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\Nuclex\Events\Delegate.h">
+      <Filter>Header Files\lib\Nuclex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\Nuclex\Events\EmptyDelegateCallError.h">
+      <Filter>Header Files\lib\Nuclex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\Nuclex\Events\Event.h">
+      <Filter>Header Files\lib\Nuclex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_nes.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\fteng\signals.hpp">
+      <Filter>Header Files\lib\fteng</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_fts.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\benchmark\cpp\benchmark_asg.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_cls.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_evl.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_jls.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_jos.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_ksc.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_mws.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_nod.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_psg.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_pss.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_pss_st.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_sss.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_vdk.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_wnk.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_yas.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\jeffomatic\jl_signal\src\ObjectPool.cpp">
+      <Filter>Source Files\lib\jeffomatic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\jeffomatic\jl_signal\src\SignalBase.cpp">
+      <Filter>Source Files\lib\jeffomatic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\mwthinker\Signal\src\mw\signals\connection.cpp">
+      <Filter>Source Files\lib\mwthinker</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\supergrover\sigslot\src\signal.cpp">
+      <Filter>Source Files\lib\supergrover</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_bs2.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_cps.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_nls.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_nls_st.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_cps_st.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_lss.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_dob.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\dacap\obs\dacap_connection.cpp">
+      <Filter>Source Files\lib\dacap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_aco.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\i42output\src\async_task.cpp">
+      <Filter>Source Files\lib\i42output</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\i42output\src\event.cpp">
+      <Filter>Source Files\lib\i42output</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\i42output\src\timer.cpp">
+      <Filter>Source Files\lib\i42output</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\i42output\src\thread.cpp">
+      <Filter>Source Files\lib\i42output</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\i42output\src\win32_message_queue.cpp">
+      <Filter>Source Files\lib\i42output</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\i42output\src\async_thread.cpp">
+      <Filter>Source Files\lib\i42output</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\i42output\src\waitable_event.cpp">
+      <Filter>Source Files\lib\i42output</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_nod_st.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\CppFakeIt\libfastsignals\src\function_detail.cpp">
+      <Filter>Source Files\lib\CppFakeIt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\CppFakeIt\libfastsignals\src\signal_impl.cpp">
+      <Filter>Source Files\lib\CppFakeIt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_lfs.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\CppFakeIt\libfastsignals\src\lfs_connection.cpp">
+      <Filter>Source Files\lib\CppFakeIt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\copperspice\cs_signal\src\cs_signal.cpp">
+      <Filter>Source Files\lib\copperspice</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\copperspice\cs_signal\src\cs_slot.cpp">
+      <Filter>Source Files\lib\copperspice</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_css.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_nss_ts.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_nss_st.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_nss_tss.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_nss_sts.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_nes.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_fts.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\CMakeLists.txt">
+      <Filter>Text Files</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Filter>Text Files</Filter>
+    </None>
+    <None Include="..\results_msvc\README.md">
+      <Filter>Text Files\results_msvc</Filter>
+    </None>
+    <None Include="..\results_gcc\README.md">
+      <Filter>Text Files\results_gcc</Filter>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>
