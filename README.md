@@ -5,23 +5,27 @@ This library is optimized for video games (and probably other low-latency applic
 
 There are many similar libraries - such as [jl_signal](http://hoyvinglavin.com/2012/08/06/jl_signal/), [nuclex signal/slots](http://blog.nuclex-games.com/2019/10/nuclex-signal-slot-benchmarks/) and [several dozens more](https://github.com/NoAvailableAlias/signal-slot-benchmarks). My work is based on a previous [research](https://github.com/TheWisp/ImpossiblyFastEventCPP17) which focused on the syntax and performance improvements brought by a C++17 feature - `template<auto>`. This library is a combination of modern C++ exploration, system programming and data-structure design. It aims to become feature-complete like `boost::signals`, yet extremely light-weight - both run time and memory footprint - in order to replace _interface_ or `std::function` based callbacks.
 
+`signal` emission is **faster** than virtual function calls. Compared to virtual calls, `signal` calls only take between 22% and 77% of the time, depending on the number and the level of randomness of classes and objects.
+
 ## Design Choices
 
 ### Direct (Blocking) Calls
 In game systems, the logic flow often consists of many fast and weakly ordered function calls. 
-No thread safety overhead
+Asynchronous calls are rather the exceptions than the default. Thread-safe calls add additional costs, thus should be the exceptions rather than the default.
 
 ### Optimized for Emission
 Latency is the bottleneck.
 
 ### O(1) Connection and Disconnection
-In a dynamic world, receivers (slots) are often frequently created and destroyed. A linear search removal algorithm can easily become the performance bottleneck, especially when a large number of slots all disconnect at the same time. Removing by swapping with the end mitigates the problem, but the overall time spent removing N slots with a linear search would still be O(N^2). In this library, a slot is removed by marking its index unused, which then gets skipped and cleaned up in the next emission. Benchmarks have shown that the overhead is dominated by memory accessing (cache misses), rather than checking for null (pipeline stalling).
+In a dynamic world, slots (receivers) are often frequently created and destroyed. A linear search removal algorithm can easily become the performance bottleneck, especially when a large number of slots all disconnect at the same time. Removing by swapping with the end mitigates the problem, but the overall time spent removing N slots with a linear search would still be O(N^2). In this library, a slot is removed by marking its index unused, which then gets skipped and cleaned up in the next emission. Benchmarks have shown that the overhead is dominated by memory accessing (cache misses), rather than checking for null (pipeline stalling).
 
 ### Safe Recursion and Modification While Iterating
 Just like direct function calls, recursions can naturally emerge from complex and dynamic behaviors. Furthermore, the signals and slots may be side-effected by their own results!
 
 ## Usage
 Simply include the single header, `signals.hpp`.
+A C++17 compliant compiler is necessary.
+Give it a try on [Godbolt](https://godbolt.org/z/TKEaZ9)!
 
 ### Basics
 The following example demonstrates how to define, connect and emit a signal.
@@ -60,11 +64,7 @@ int main()
 }
 ```
 
-Signals automatically disconnect from their receivers (slots) upon destruction.
-
-IMPORTANT NOTE: Receivers don't automatically disconnect from the signal when they go out of scope. 
-This is due to the non-intrusiveness design and it being as close to 0-cost as possible.
-See `Connection Management` for how to automatically disconnect the receivers.
+Signals automatically disconnect from their slots (receivers) upon destruction.
 ```cpp
 class button{
   public: fteng::signal<void(button& btn, bool down)> pressed;
@@ -85,32 +85,39 @@ class my_special_frame {
 ```
 
 ### Connection Management
-The `connect()` method returns an unmanaged (raw) connection, which may be converted to a `fteng::connection` representing the unique ownership.
-It is recommended to save this connection into the receiver's structure in order to automatically disconnect from the signal in an RAII fashion.
+Slots don't automatically disconnect from the signal when they go out of scope. 
+This is due to the non-intrusive design and the "pay only for what you use" principle.
+
+To help automatically disconnect the slot, the `connect()` method returns an unmanaged (raw) connection, which may be converted to a `fteng::connection` representing the unique ownership.
+It is recommended to save this connection into the slot's structure in order to automatically disconnect from the signal in an RAII fashion.
+
+The following design would automatically disconnect the object from the signal when it is deleted.
 
 ```cpp
 class game { /*...*/ };
 fteng::signal<void(const game& instance)> game_created;
 
-int main()
-{
-  game game_instance;
-  game_created(game_instance); //notifies each subsystem
-}
-```
-
-The following design would automatically disconnect from the signal when the object gets deleted.
-
-```cpp
 class subsystem
 {
   //Connects a signal with a lambda capturing 'this'
   fteng::connection on_game_created = game_created.connect([this](const game& instance)
   {
-    std::cout << "Game is created, now we can create other systems!\n";
+    std::cout << "Game is created.\n";
   });
 };
-static subsystem subsystem_instance;
+
+int main()
+{
+  subsystem* sys1 = new subsystem;
+
+  game game_instance;
+  game_created(game_instance); // Notifies each subsystem
+
+  delete sys1; // Automatically disconnects from the signal
+
+  game game_instance2;
+  game_created(game_instance2); // Notifies each subsystem. Should not crash.
+}
 ```
 
 Alternatively, you may use a member function for callback.
@@ -119,17 +126,23 @@ Alternatively, you may use a member function for callback.
 class subsystem
 {
   //Connects a signal with a member function
-  //Automatically disconnects from the signal when this object gets deleted.
-  fteng::connection on_game_created2 = game_created.connect<&subsystem::on_game_created_method>(this);
+  fteng::connection on_game_created = game_created.connect<&subsystem::on_game_created_method>(this);
+
   void on_game_created_method(const game& instance)
   {
-    std::cout << "Game is created, now we can create other systems!\n";
+    std::cout << "Game is created.\n";
   };
 };
-static subsystem subsystem_instance;
 ```
 
-### Connecting / Disconnecting from Callback
+A few important notes about the `connection` object:
+- `connection` is default-constructible, moveable but not copyable.
+- Destroying the `connection` object would automatically disconnect the associated signal and slot.
+- If you know the slot outlives the signal, it's fine to connect them without saving the connection object. There won't be any memory leak.
+- If the signal can outlive the slots, store the `connection` in the slot's structure so that it disconnects the signal automatically.
+
+### Connecting / Disconnecting Slots from Callback
+Sometimes during the callback, we might want to disconnect the slot from the signal. There are also cases where we want to create or destroy other objects, who just happen to observe the same signal that triggered the callback. The following example demonstrates how these usage are supported by the library.
 ```cpp
 fteng::signal<void(entity eid)> entity_created;
 
@@ -141,9 +154,9 @@ class A
   {
     // Creates a 'B' which also connects to the signal.
     // It's fine to connect more objects to the signal during the callback, 
-    // With a caveat that it won't be notified this time (but will be notified next time).
+    // With a caveat that they won't be notified this time (but next time).
     b = std::make_unique<B>(); 
-  })
+  });
 };
 
 class B
@@ -168,11 +181,35 @@ class B
       // Also fine - Don't do this in modern C++ though ...
       delete this;
     }
-  })
+  });
 };
 ```
 
-## Benchmark
+### Blocking a Connection
+A connection can be temporarily disabled with `block()`, so that it won't be notified by the signal until it has been `unblock()` ed again.
+```cpp
+fteng::signal<void()> sig;
+
+class Foo
+{
+  fteng::connection conn = sig.connect([this](){
+    conn.block();
+    sig(); // Now this won't cause an infinite recursion.
+    conn.unblock();
+  });
+};
+```
+
+## Performance Benchmark
+With a little help of template metaprogramming, I've generated classes of different virtual tables (even though small vtable with just 2 methods).
+
+The bottleneck of emission is the cache loading, therefore it makes sense to test different scenarios depending on object memory addresses and class vtable addresses.
+If the objects being called are nicely aligned in the memory, we could expect a speed-up from the cache coherence. Similarly, if all objects are from the same class,
+their virtual methods would be the same and therefore a speed-up. In the benchmark, I've tested 4 scenarios where each creates 100,000 objects from at most 100 different classes:
+- SAME class, SEQUENTIAL objects: all objects are instances of the same class, and are contiguous in the memory.
+- SAME class, RANDOM objects: all objects are instancess of the same class, but are randomly scattered in the memory.
+- RANDOM class, SEQUENTIAL objects: each object's class is one of 100 possible classes, but they are contiguous in the memory.
+- RANDOM class, RANDOM objects: each object's class is one of 100 possible classes, and they are randomly scattered in the memory.
 
 Xeon E3-1275 V2 @ 3.90 GHz 16.0 GB RAM
 
