@@ -116,7 +116,7 @@ namespace fteng
 			}
 		};
 
-		sig_base::~sig_base()
+		inline sig_base::~sig_base()
 		{
 			for (conn_base* c : conns)
 			{
@@ -130,7 +130,7 @@ namespace fteng
 			}
 		}
 
-		sig_base::sig_base(sig_base&& other) noexcept
+		inline sig_base::sig_base(sig_base&& other) noexcept
 			: calls(std::move(other.calls))
 			, conns(std::move(other.conns))
 			, calling(other.calling)
@@ -140,7 +140,7 @@ namespace fteng
 				if (c) c->set_sig(this);
 		}
 
-		sig_base& sig_base::operator= (sig_base&& other) noexcept
+		inline sig_base& sig_base::operator= (sig_base&& other) noexcept
 		{
 			calls = std::move(other.calls);
 			conns = std::move(other.conns);
