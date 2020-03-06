@@ -1,7 +1,7 @@
 # Signals
 
 ## Why Yet Another Signal-Slot Library?
-This library is optimized for video games (and probably other low-latency applications as well). Interestingly, even though the observer pattern is generally useful, it has never been standardized in C++, which leads to the never-ending attempts at improvements by curious people. I view it as a good thing, because if `boost::signals2` was standardized, [it would have been a disaster for real-time applications](https://stackoverflow.com/questions/22416860/is-boostsignals2-overkill-for-simple-applications).
+This library is optimized for video games (and probably other low-latency applications as well). Interestingly, even though the observer pattern is generally useful, it has never been standardized in C++, which leads to the never-ending attempts at improvements by curious people. Many signal-slot libraries do not focus on performance, e.g. `boost::signals2` [invocation can be 90x more expensive than a simple function call](https://stackoverflow.com/questions/22416860/is-boostsignals2-overkill-for-simple-applications).
 
 There are many similar libraries - such as [jl_signal](http://hoyvinglavin.com/2012/08/06/jl_signal/), [nuclex signal/slots](http://blog.nuclex-games.com/2019/10/nuclex-signal-slot-benchmarks/) and [several dozens more](https://github.com/NoAvailableAlias/signal-slot-benchmarks). My work is based on a previous [research](https://github.com/TheWisp/ImpossiblyFastEventCPP17) which focused on the syntax and performance improvements brought by a C++17 feature - `template<auto>`. This library is a combination of modern C++ exploration, system programming and data-structure design. It aims to become feature-complete like `boost::signals`, yet extremely light-weight - both run time and memory footprint - in order to replace _interface_ or `std::function` based callbacks.
 
@@ -25,7 +25,7 @@ Just like direct function calls, recursions can naturally emerge from complex an
 ## Usage
 Simply include the single header, `signals.hpp`.
 A C++17 compliant compiler is necessary.
-Give it a try on [Godbolt](https://godbolt.org/z/TKEaZ9)!
+Give it a try on [Godbolt](https://godbolt.org/z/_N2_5P)!
 
 ### Basics
 The following example demonstrates how to define, connect and emit a signal.
