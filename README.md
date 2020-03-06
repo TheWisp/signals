@@ -222,7 +222,11 @@ Xeon E3-1275 V2 @ 3.90 GHz 16.0 GB RAM
 
 ## Signal-Slots Benchmark Compared to Other Libraries
 See https://github.com/NoAvailableAlias/signal-slot-benchmarks
+Using Windows + MSVC setup provided by the benchmark (/O2)
 Xeon E3-1275 V2 @ 3.90 GHz 16.0 GB RAM
+
+Disclaimer: The benchmark does not represent real-world use cases and the relative rankings are not good indicators of performance. Nevertheless, it does show the `emit` performance of this library is among the top ones while also securing the recursion- and modification-safety. 
+
 
 | Library | [constr] | [destr] | conn | disconn | reconn | emit | all | threaded | score |
 |---------|----------|---------|------|---------|--------|------|-----|----------|-------|
