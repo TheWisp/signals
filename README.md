@@ -1,5 +1,7 @@
 # Signals
 
+For design choices see [this blog post](https://dreamdota.com/c-17-signals/)
+
 ## Why Yet Another Signal-Slot Library?
 This library is optimized for video games (and probably other low-latency applications as well). Interestingly, even though the observer pattern is generally useful, it has never been standardized in C++, which leads to the never-ending attempts at improvements by curious people. Many signal-slot libraries do not focus on performance, e.g. `boost::signals2` [invocation can be 90x more expensive than a simple function call](https://stackoverflow.com/questions/22416860/is-boostsignals2-overkill-for-simple-applications).
 
