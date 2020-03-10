@@ -16,13 +16,13 @@
 
 #ifdef _WIN32
 
-//#ifdef BUILDING_LIB_CS_SIGNAL
-//# define LIB_SIG_EXPORT     __declspec(dllexport)
-//#else
-//# define LIB_SIG_EXPORT     __declspec(dllimport)
-//#endif
-//
-//#else
+#ifdef BUILDING_LIB_CS_SIGNAL
+# define LIB_SIG_EXPORT     __declspec(dllexport)
+#else
+# define LIB_SIG_EXPORT     __declspec(dllimport)
+#endif
+
+#else
 # define LIB_SIG_EXPORT
 
 #endif

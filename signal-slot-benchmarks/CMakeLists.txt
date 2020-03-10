@@ -18,13 +18,17 @@ add_executable(bench
     benchmark/cpp/benchmark_cls.cpp
     benchmark/cpp/benchmark_cps.cpp
     benchmark/cpp/benchmark_cps_st.cpp
+    benchmark/cpp/benchmark_css.cpp
     benchmark/cpp/benchmark_dob.cpp
     benchmark/cpp/benchmark_evl.cpp
+    benchmark/cpp/benchmark_fts.cpp
     benchmark/cpp/benchmark_jls.cpp
     benchmark/cpp/benchmark_jos.cpp
     benchmark/cpp/benchmark_ksc.cpp
+    benchmark/cpp/benchmark_lfs.cpp
     benchmark/cpp/benchmark_lss.cpp
     benchmark/cpp/benchmark_mws.cpp
+    benchmark/cpp/benchmark_nes.cpp
     benchmark/cpp/benchmark_nls.cpp
     benchmark/cpp/benchmark_nls_st.cpp
     benchmark/cpp/benchmark_nod.cpp

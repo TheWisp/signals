@@ -9,7 +9,7 @@ namespace is::signals::detail
 {
 /// Buffer for callable object in-place construction,
 /// helps to implement Small Buffer Optimization.
-static constexpr size_t inplace_buffer_size = (sizeof(int) == sizeof(void*) ? 8 : 6) * sizeof(void*);
+static constexpr std::size_t inplace_buffer_size = (sizeof(int) == sizeof(void*) ? 8 : 6) * sizeof(void*);
 
 /// Structure that has size enough to keep type "T" including vtable.
 template <class T>
