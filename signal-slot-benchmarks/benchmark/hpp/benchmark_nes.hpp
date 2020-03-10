@@ -20,10 +20,10 @@ class Nes
     template <typename Subject, typename Foo>
     static void connect_method(Subject& subject, Foo& foo)
     {
-        subject.Subscribe<Foo, &Foo::handler>(&foo);
+        subject.template Subscribe<Foo, &Foo::handler>(&foo);
         // Automatically disconnect when the foo instance is destroyed
         // Benchmarks require connection management
-        foo.reg = make_slot_scope([&](void*) { subject.Unsubscribe<Foo, &Foo::handler>(&foo); });
+        foo.reg = make_slot_scope([&](void*) { subject.template Unsubscribe<Foo, &Foo::handler>(&foo); });
     }
     template <typename Subject>
     static void emit_method(Subject& subject, Rng& rng)

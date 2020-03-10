@@ -19,7 +19,7 @@ class Nss_tss : public Nano::Observer<Nano::TS_Policy_Safe<>>
     template <typename Subject, typename Foo>
     static void connect_method(Subject& subject, Foo& foo)
     {
-        subject.connect<&Foo::handler>(foo);
+        subject.template connect<&Foo::handler>(foo);
     }
     template <typename Subject>
     static void emit_method(Subject& subject, Rng& rng)

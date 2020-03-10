@@ -42,7 +42,7 @@ namespace mw {
 		}
 
 		inline int size() const {
-			functions_.size();
+			return functions_.size();
 		}
 
 	private:
