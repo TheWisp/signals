@@ -22,6 +22,7 @@ add_executable(bench
     benchmark/cpp/benchmark_dob.cpp
     benchmark/cpp/benchmark_evl.cpp
     benchmark/cpp/benchmark_fts.cpp
+    benchmark/cpp/benchmark_ics.cpp
     benchmark/cpp/benchmark_jls.cpp
     benchmark/cpp/benchmark_jos.cpp
     benchmark/cpp/benchmark_ksc.cpp
@@ -62,8 +63,11 @@ add_executable(bench
     benchmark/lib/copperspice/cs_signal/src/cs_slot.cpp
 )
 
+add_subdirectory(benchmark/lib/iscool)
+
 set_target_properties(bench PROPERTIES CXX_EXTENSIONS NO)
 target_include_directories(bench PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_compile_options(bench PRIVATE  "-fdiagnostics-color=always")
-target_link_libraries(bench Boost::system Boost::chrono Threads::Threads)
+target_link_libraries(bench
+  iscool_signals Boost::system Boost::chrono Threads::Threads)
 

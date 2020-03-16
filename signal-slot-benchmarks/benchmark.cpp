@@ -11,6 +11,7 @@
 #include "benchmark/hpp/benchmark_css.hpp"
 #include "benchmark/hpp/benchmark_dob.hpp"
 #include "benchmark/hpp/benchmark_evl.hpp"
+#include "benchmark/hpp/benchmark_ics.hpp"
 #include "benchmark/hpp/benchmark_jls.hpp"
 #include "benchmark/hpp/benchmark_jos.hpp"
 #include "benchmark/hpp/benchmark_ksc.hpp"
@@ -149,6 +150,7 @@ void run_all_benchmarks()
         RUN_BENCHMARK_CLASS(Dob); // Must make sure Subject lives longer than Foo
         RUN_BENCHMARK_CLASS(Evl);
         RUN_BENCHMARK_CLASS(Fts);
+        RUN_BENCHMARK_CLASS(Ics);
         RUN_BENCHMARK_CLASS(Jls);
         RUN_BENCHMARK_CLASS(Jos); // Must make sure Subject lives longer than Foo
         RUN_BENCHMARK_CLASS(Ksc);
@@ -192,6 +194,7 @@ void run_all_validation_tests()
     Dob::validate_assert(N);
     Evl::validate_assert(N);
     Fts::validate_assert(N);
+    Ics::validate_assert(N);
     Jls::validate_assert(N);
     Jos::validate_assert(N);
     Ksc::validate_assert(N);
@@ -272,6 +275,7 @@ void output_metrics_report(T& ost)
     output_metrics_report_row<Dob>(ost);
     output_metrics_report_row<Evl>(ost);
     output_metrics_report_row<Fts>(ost);
+    output_metrics_report_row<Ics>(ost);
     output_metrics_report_row<Jls>(ost);
     output_metrics_report_row<Jos>(ost);
     output_metrics_report_row<Ksc>(ost);

@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.2)
+file(GLOB_RECURSE SOURCE_FILES *.cpp)
+add_library(iscool_signals STATIC ${SOURCE_FILES})
+target_include_directories(iscool_signals PUBLIC include)
+set_property(TARGET iscool_signals PROPERTY CXX_STANDARD 11)
