@@ -35,7 +35,7 @@ namespace Internal {
    class TeaCupAbstract;
 }
 
-class LIB_SIG_EXPORT PendingSlot
+class PendingSlot
 {
    public:
       PendingSlot(const PendingSlot &) = delete;
@@ -71,7 +71,7 @@ class LIB_SIG_EXPORT PendingSlot
       std::unique_ptr<Internal::TeaCupAbstract> m_teaCup_Data;
 };
 
-class LIB_SIG_EXPORT SlotBase
+class SlotBase
 {
    public:
       SlotBase();
