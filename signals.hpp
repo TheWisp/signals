@@ -318,12 +318,14 @@ namespace fteng
 				{
 					f_type* ptr;
 
+					unique(f_type* ptr) : ptr(ptr) {}
+					unique(const unique&) = delete;
+					unique(unique&&) = delete;
+
 					~unique()
 					{
 						delete ptr;
 					}
-
-					unique(unique&) = delete;
 				};
 
 				size_t idx = conns.size();
