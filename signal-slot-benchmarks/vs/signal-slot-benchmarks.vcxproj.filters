@@ -125,6 +125,11 @@
     </Filter>
     <Filter Include="Header Files\lib\fteng">
       <UniqueIdentifier>{c466c8d1-887f-46f9-afa6-59847e836a79}</UniqueIdentifier>
+    <Filter Include="Header Files\lib\iscool">
+      <UniqueIdentifier>{e697dcc6-8807-48d1-b640-6b7d04cf73e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lib\iscool">
+      <UniqueIdentifier>{a702aa14-871c-4238-a103-954d727f54df}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -452,9 +457,6 @@
     <ClInclude Include="..\benchmark\lib\copperspice\cs_signal\src\rcu_list.hpp">
       <Filter>Header Files\lib\copperspice</Filter>
     </ClInclude>
-    <ClInclude Include="..\benchmark\hpp\benchmark_css.hpp">
-      <Filter>Header Files\benchmark</Filter>
-    </ClInclude>
     <ClInclude Include="..\benchmark\lib\CppFakeIt\libfastsignals\include\msvc_autolink.h">
       <Filter>Header Files\lib\CppFakeIt</Filter>
     </ClInclude>
@@ -503,8 +505,20 @@
     <ClInclude Include="..\benchmark\lib\fteng\signals.hpp">
       <Filter>Header Files\lib\fteng</Filter>
     </ClInclude>
+    <ClInclude Include="..\benchmark\lib\iscool\include\iscool\signals\signal.h">
+      <Filter>Header Files\lib\iscool</Filter>
+    </ClInclude>
     <ClInclude Include="..\benchmark\hpp\benchmark_fts.hpp">
       <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_ics.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\hpp\benchmark_css.hpp">
+      <Filter>Header Files\benchmark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\benchmark\lib\iscool\include\iscool\signals\implement_signal.h">
+      <Filter>Header Files\lib\iscool</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -557,9 +571,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\benchmark\lib\jeffomatic\jl_signal\src\ObjectPool.cpp">
-      <Filter>Source Files\lib\jeffomatic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\benchmark\lib\jeffomatic\jl_signal\src\SignalBase.cpp">
       <Filter>Source Files\lib\jeffomatic</Filter>
     </ClCompile>
     <ClCompile Include="..\benchmark\lib\mwthinker\Signal\src\mw\signals\connection.cpp">
@@ -631,15 +642,6 @@
     <ClCompile Include="..\benchmark\lib\CppFakeIt\libfastsignals\src\lfs_connection.cpp">
       <Filter>Source Files\lib\CppFakeIt</Filter>
     </ClCompile>
-    <ClCompile Include="..\benchmark\lib\copperspice\cs_signal\src\cs_signal.cpp">
-      <Filter>Source Files\lib\copperspice</Filter>
-    </ClCompile>
-    <ClCompile Include="..\benchmark\lib\copperspice\cs_signal\src\cs_slot.cpp">
-      <Filter>Source Files\lib\copperspice</Filter>
-    </ClCompile>
-    <ClCompile Include="..\benchmark\cpp\benchmark_css.cpp">
-      <Filter>Source Files\benchmark</Filter>
-    </ClCompile>
     <ClCompile Include="..\benchmark\cpp\benchmark_nss_ts.cpp">
       <Filter>Source Files\benchmark</Filter>
     </ClCompile>
@@ -657,6 +659,72 @@
     </ClCompile>
     <ClCompile Include="..\benchmark\cpp\benchmark_fts.cpp">
       <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\iscool\src\iscool\signals\scoped_connection.cpp">
+      <Filter>Source Files\lib\iscool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\iscool\src\iscool\signals\shared_connection.cpp">
+      <Filter>Source Files\lib\iscool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\iscool\src\iscool\signals\shared_connection_set.cpp">
+      <Filter>Source Files\lib\iscool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\iscool\src\iscool\signals\statistics_data.cpp">
+      <Filter>Source Files\lib\iscool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\iscool\src\iscool\signals\statistics_sink.cpp">
+      <Filter>Source Files\lib\iscool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\iscool\src\iscool\signals\detail\slot.cpp">
+      <Filter>Source Files\lib\iscool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\iscool\src\iscool\signals\detail\statistics_function.cpp">
+      <Filter>Source Files\lib\iscool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\iscool\src\iscool\signals\ics_signal.cpp">
+      <Filter>Source Files\lib\iscool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\iscool\src\iscool\signals\ics_connection.cpp">
+      <Filter>Source Files\lib\iscool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\iscool\src\iscool\digits.cpp">
+      <Filter>Source Files\lib\iscool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\iscool\src\iscool\none.cpp">
+      <Filter>Source Files\lib\iscool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\iscool\src\iscool\optional.cpp">
+      <Filter>Source Files\lib\iscool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\iscool\src\iscool\profile\profile_data.cpp">
+      <Filter>Source Files\lib\iscool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\iscool\src\iscool\profile\profiler.cpp">
+      <Filter>Source Files\lib\iscool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\iscool\src\iscool\profile\scoped_profiler.cpp">
+      <Filter>Source Files\lib\iscool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\iscool\src\iscool\profile\setup.cpp">
+      <Filter>Source Files\lib\iscool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\iscool\src\iscool\profile\detail\output_function.cpp">
+      <Filter>Source Files\lib\iscool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_ics.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\copperspice\cs_signal\src\cs_signal.cpp">
+      <Filter>Source Files\lib\copperspice</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\copperspice\cs_signal\src\cs_slot.cpp">
+      <Filter>Source Files\lib\copperspice</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\cpp\benchmark_css.cpp">
+      <Filter>Source Files\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\benchmark\lib\jeffomatic\jl_signal\src\SignalBase.cpp">
+      <Filter>Source Files\lib\jeffomatic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

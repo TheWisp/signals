@@ -1,11 +1,14 @@
 #pragma once
 
+#include <iscool/signals/scoped_connection.h>
 #include <iscool/signals/signal.h>
 
 #include "../../benchmark.hpp"
 
 class Ics
 {
+    iscool::signals::scoped_connection reg;
+
     NOINLINE(void handler(Rng& rng))
     {
         volatile std::size_t a = rng(); (void)a;
@@ -18,7 +21,7 @@ class Ics
     template <typename Subject, typename Foo>
     static void connect_method(Subject& subject, Foo& foo)
     {
-        subject.connect(std::bind(&Foo::handler, &foo, std::placeholders::_1));
+        foo.reg = subject.connect(std::bind(&Foo::handler, &foo, std::placeholders::_1));
     }
     template <typename Subject>
     static void emit_method(Subject& subject, Rng& rng)

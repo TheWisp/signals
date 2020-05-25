@@ -6,6 +6,8 @@
 
 class Bs2 : public boost::signals2::trackable
 {
+    boost::signals2::scoped_connection reg;
+  
     NOINLINE(void handler(Rng& rng))
     {
         volatile std::size_t a = rng(); (void)a;
@@ -18,7 +20,7 @@ class Bs2 : public boost::signals2::trackable
     template <typename Subject, typename Foo>
     static void connect_method(Subject& subject, Foo& foo)
     {
-        subject.connect(std::bind(&Foo::handler, &foo, std::placeholders::_1));
+        foo.reg = subject.connect(std::bind(&Foo::handler, &foo, std::placeholders::_1));
     }
     template <typename Subject>
     static void emit_method(Subject& subject, Rng& rng)

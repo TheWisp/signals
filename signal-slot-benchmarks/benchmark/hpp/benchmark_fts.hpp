@@ -6,6 +6,8 @@
 
 class Fts
 {
+    fteng::connection m_connection;
+  
     NOINLINE(void handler(Rng& rng))
     {
         volatile std::size_t a = rng(); (void)a;
@@ -15,10 +17,15 @@ public:
 
     using Signal = fteng::signal<void(Rng&)>;
 
+    ~Fts()
+    {
+        m_connection.disconnect();
+    }
+  
     template <typename Subject, typename Foo>
     static void connect_method(Subject& subject, Foo& foo)
     {
-        subject.template connect<&Foo::handler>(&foo);
+        foo.m_connection = subject.template connect<&Foo::handler>(&foo);
     }
     template <typename Subject>
     static void emit_method(Subject& subject, Rng& rng)

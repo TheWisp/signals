@@ -40,6 +40,7 @@
 | joanrieu signal11 | 1649 | 2925 | 11353 | 16915 | 11296 | 116547 | 6558 | 0 | 162669 |
 | supergrover sigslot | 2102 | 3207 | 4118 | 4998 | 4109 | 142148 | 2067 | 0 | 157440 |
 | nano-signal-slot sts | 48477 | 27921 | 11331 | 19930 | 18062 | 89583 | 8595 | 0 | 147500 |
+| iscool::signals | 40332 | 46436 | 9352 | 39834 | 9737 | 40651 | 360 | 0 | 99932 |
 | EvilTwin Observer | 3982 | 4260 | 4601 | 8503 | 5549 | 62978 | 2992 | 0 | 84623 |
 | copperspice cs_signal | 7411 | 2122 | 2699 | 3090 | 2966 | 13366 | 1333 | 0 | 23453 |
 | neolib event | 16851 | 606 | 2304 | 4619 | 2776 | 6002 | 1289 | 0 | 16989 |
@@ -85,6 +86,7 @@ _Size results are the size of object files from x64 release build with Visual St
 | [EvilTwin Observer](http://eviltwingames.com/blog/the-observer-pattern-revisited/) | 327 kb | 40 b | X | std::vector | - |
 | [fr00b0 nod](https://github.com/fr00b0/nod) | 342 kb | 72 b | X | std::vector | - |
 | [amc522 Signal11](https://github.com/amc522/Signal11) | 351 kb | 16 b | X | std::vector | - |
+| [iscool::signals](https://github.com/IsCoolEntertainment/iscool-core/) | 460 kb | 64 b | - | std::vector | - |
 | [copperspice cs_signal](https://github.com/copperspice/cs_signal) | 463 kb | 128 b | - | **RCU List | DIY |
 | [neolib event](https://github.com/i42output/neolib) | 2084 kb | 136 b | - | **std::unordered_map | - |
 
