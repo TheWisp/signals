@@ -192,7 +192,7 @@ namespace FunctorTest
 {
 	struct Functor
 	{
-		int val = 0;
+		int &val;
 		void operator()(int x)
 		{
 			val += x;
@@ -201,11 +201,12 @@ namespace FunctorTest
 
 	void test()
 	{
-		Functor o;
+		int val = 0;
+		Functor o{val};
 		signal<void(int)> sig;
 		sig.connect(o);
 		sig(10);
-		assert(o.val == 10);
+		assert(val == 10);
 	}
 }
 
@@ -248,6 +249,7 @@ void test()
 			foo.sig(1.f);
 			assert(bar1.total == 2);
 			assert(bar3->total == 2);
+			delete bar3;
 		}
 		foo.sig(1.f);
 	}

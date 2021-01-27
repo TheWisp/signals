@@ -109,7 +109,7 @@ namespace fteng
 		{
 			using conn_base::conn_base;
 
-			virtual ~conn_nontrivial()
+			~conn_nontrivial() override
 			{
 				if (sig)
 					reinterpret_cast<T*>(&sig->calls[idx].object)->~T();
@@ -272,67 +272,47 @@ namespace fteng
 			return connect(func);
 		}
 
-		connection_raw connect(void(*func)(A...)) const
-		{
-			size_t idx = conns.size();
-			auto& call = calls.emplace_back();
-			call.func = call.object = reinterpret_cast<void*>(func);
-			details::conn_base* conn = new details::conn_base(this, idx);
-			conns.emplace_back(conn);
-			return { conn };
-		}
-
 		template<typename F>
 		connection_raw connect(F&& functor) const
 		{
-			using f_type = std::remove_pointer_t<std::remove_reference_t<F>>;
-			if constexpr (std::is_convertible_v<f_type, void(*)(A...)>)
+			using value_t = std::decay_t<F>;
+
+			size_t idx = conns.size();
+			auto& call = calls.emplace_back();
+
+			if constexpr (std::is_convertible_v<decltype(functor), void(*)(A...)>)
 			{
-				return connect(+functor);
-			}
-			else if constexpr (std::is_lvalue_reference_v<F>)
-			{
-				size_t idx = conns.size();
-				auto& call = calls.emplace_back();
-				call.func = reinterpret_cast<void*>(+[](void* obj, A ... args) { (*reinterpret_cast<f_type**>(obj))->operator()(args...); });
-				call.object = &functor;
+				void(*func)(A...) = functor;
+				call.func = call.object = reinterpret_cast<void*>(func);
 				details::conn_base* conn = new details::conn_base(this, idx);
 				conns.emplace_back(conn);
 				return { conn };
 			}
-			else if constexpr (sizeof(std::remove_pointer_t<f_type>) <= sizeof(void*))
+			else if constexpr (sizeof(value_t) <= sizeof(void*) && alignof(value_t) <= alignof(void*))
 			{
-				//copy the functor.
-				size_t idx = conns.size();
-				auto& call = calls.emplace_back();
-				call.func = reinterpret_cast<void*>(+[](void* obj, A ... args) { reinterpret_cast<f_type*>(obj)->operator()(args...); });
-				new (&call.object) f_type(std::move(functor));
-				using conn_t = std::conditional_t<std::is_trivially_destructible_v<F>, details::conn_base, details::conn_nontrivial<F>>;
+				call.func = reinterpret_cast<void*>(+[](void *obj, A ... args) { reinterpret_cast<value_t *>(obj)->operator()(args...); });
+				new (&call.object) value_t(std::forward<F>(functor));
+				using conn_t = std::conditional_t<std::is_trivially_destructible_v<value_t>, details::conn_base, details::conn_nontrivial<value_t>>;
 				details::conn_base* conn = new conn_t(this, idx);
 				conns.emplace_back(conn);
 				return { conn };
 			}
 			else
 			{
-				struct unique
+				struct deleter
 				{
-					f_type* ptr;
+					value_t* ptr;
 
-					unique(f_type* ptr) : ptr(ptr) {}
-					unique(const unique&) = delete;
-					unique(unique&&) = delete;
-
-					~unique()
+					~deleter()
 					{
 						delete ptr;
 					}
 				};
+				static_assert(sizeof(deleter) <= sizeof(void*) && alignof(deleter) <= alignof(void*));
 
-				size_t idx = conns.size();
-				auto& call = calls.emplace_back();
-				call.func = reinterpret_cast<void*>(+[](void* obj, A ... args) { reinterpret_cast<unique*>(obj)->ptr->operator()(args...); });
-				new (&call.object) unique{ new f_type(std::move(functor)) };
-				details::conn_base* conn = new details::conn_nontrivial<unique>(this, idx);
+				call.func = reinterpret_cast<void*>(+[](void *obj, A ... args) { reinterpret_cast<deleter*>(obj)->ptr->operator()(args...); });
+				new (&call.object) deleter{ new value_t(std::forward<F>(functor)) };
+				details::conn_base* conn = new details::conn_nontrivial<deleter>(this, idx);
 				conns.emplace_back(conn);
 				return { conn };
 			}
