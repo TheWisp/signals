@@ -44,7 +44,7 @@ namespace fteng
 				const sig_base* sig;
 				blocked_connection* blocked_conn;
 			};
-			
+
 			size_t          idx;
 
 			// space can be optimized by stealing bits from index as it's impossible to support max uint64 number of slots
@@ -71,10 +71,21 @@ namespace fteng
 				}
 			}
 
-			void set_sig(const sig_base* sig) 
+			virtual void destroy_payload()
+			{
+				this->set_sig(nullptr);
+			}
+
+			void set_sig(const sig_base* sig)
 			{
 				if (blocked) this->blocked_conn->sig = sig;
 				else this->sig = sig;
+			}
+
+			const sig_base* get_sig() const
+			{
+				if (blocked) return this->blocked_conn->sig;
+				else return this->sig;
 			}
 
 			void block()
@@ -111,8 +122,19 @@ namespace fteng
 
 			virtual ~conn_nontrivial()
 			{
-				if (sig)
-					reinterpret_cast<T*>(&sig->calls[idx].object)->~T();
+				this->do_destroy_payload();
+			}
+
+			void destroy_payload() override
+			{
+				this->do_destroy_payload();
+				this->set_sig(nullptr);
+			}
+
+			void do_destroy_payload()
+			{
+				if (const sig_base* s = this->get_sig())
+					reinterpret_cast<T*>(&s->calls[idx].object)->~T();
 			}
 		};
 
@@ -120,11 +142,10 @@ namespace fteng
 		{
 			for (conn_base* c : conns)
 			{
-				if (c) 
+				if (c)
 				{
-					if (c->owned)
-						c->set_sig(nullptr);
-					else
+					c->destroy_payload();
+					if (!c->owned)
 						delete c;
 				}
 			}
@@ -151,7 +172,7 @@ namespace fteng
 			return *this;
 		}
 	}
-	
+
 	template<typename F> struct signal;
 
 	// A connection without auto disconnection
