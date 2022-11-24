@@ -1,5 +1,5 @@
 #include <cassert>
-#include "signals.hpp"
+#include <fteng/signals.hpp>
 #include <functional>
 #include <iostream>
 #include <algorithm>
