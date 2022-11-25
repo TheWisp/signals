@@ -1,5 +1,5 @@
 
-# signal-slot-benchmarks
+# Benchmarks
 
 Comprehensive benchmarks for a majority of GitHub c++ signal slot implementations and others.
 <br/>

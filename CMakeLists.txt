@@ -33,7 +33,7 @@ if(FTENG_SIGNALS_BUILD_TEST_APP)
 	add_subdirectory(TestApp)
 endif()
 if(FTENG_SIGNALS_BUILD_BENCHMARKS)
-	add_subdirectory(signal-slot-benchmarks)
+	add_subdirectory(Benchmarks)
 endif()
 
 if(NOT FTENG_SIGNALS_BUNDLED)

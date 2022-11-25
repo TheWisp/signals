@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "neolib.hpp"
 #include <list>
+#include <map>
 #include <unordered_map>
 #include <optional>
 #include <mutex>
@@ -571,12 +572,12 @@ namespace neolib
 	private:
 		void add_ref() const
 		{
-			for (auto c : iControllers)
+			for (auto & c : iControllers)
 				c(AddRef);
 		}
 		void release() const
 		{
-			for (auto c : iControllers)
+			for (auto & c : iControllers)
 				c(Release);
 		}
 	private:
