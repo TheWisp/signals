@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.6)
-project(signal-slot-benchmarks VERSION 0.0.1 LANGUAGES CXX)
+project(Benchmarks VERSION 0.0.1 LANGUAGES CXX)
 
 # compiler support
 set(CMAKE_CXX_STANDARD 17)
@@ -10,7 +10,7 @@ find_package(Boost COMPONENTS system chrono thread REQUIRED)
 find_package(Threads)
 
 # project definition
-add_executable(bench
+add_executable(${PROJECT_NAME}
     benchmark.cpp
     benchmark/cpp/benchmark_aco.cpp
     benchmark/cpp/benchmark_asg.cpp
@@ -65,9 +65,20 @@ add_executable(bench
 
 add_subdirectory(benchmark/lib/iscool)
 
-set_target_properties(bench PROPERTIES CXX_EXTENSIONS NO)
-target_include_directories(bench PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
-target_compile_options(bench PRIVATE  "-fdiagnostics-color=always")
-target_link_libraries(bench
-  iscool_signals Boost::system Boost::chrono Threads::Threads)
+set_target_properties(${PROJECT_NAME}
+    PROPERTIES CXX_EXTENSIONS NO
+    OUTPUT_NAME FTengSignals-${PROJECT_NAME}
+)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_compile_options(${PROJECT_NAME} PRIVATE  "-fdiagnostics-color=always")
+target_link_libraries(${PROJECT_NAME}
+    iscool_signals Boost::system Boost::chrono Threads::Threads
+)
+
+if(NOT FTENG_SIGNALS_BUNDLED)
+	install(TARGETS ${PROJECT_NAME}
+		EXPORT ${FTengSignals_TARGETS}
+		RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+	)
+endif()
 

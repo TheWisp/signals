@@ -29,6 +29,107 @@ Simply include the single header, `signals.hpp`.
 A C++17 compliant compiler is necessary.
 Give it a try on [Godbolt](https://godbolt.org/z/_N2_5P)!
 
+### CMake build/install
+In order to install this library system-wide and/or use it within downstream projects as convinience CMake target one should to build/install the library using CMake. There are two ways:
+
+1. Build and install the library and find it within your CMake project.
+
+    1.1. Build/install
+    ```sh
+    cd <FTeng/Signals/project/root>
+    mkdir build
+    cd build
+    cmake .. [OPTIONS]
+    cmake --build . [--target install]
+    ```
+    Where possible `OPTIONS` are:
+    - `-DFTENG_SIGNALS_BUILD_TEST_APP:BOOL=FALSE` # Build test app; `TRUE` by default
+    - `-DFTENG_SIGNALS_BUILD_BENCHMARKS:BOOL=TRUE` # Build benchmarks; `FALSE` by default
+    - `-DCMAKE_INSTALL_PREFIX=<PATH>` # Use custom `PATH` to install into; `/usr` by default on Linux
+    - `-DCMAKE_BUILD_TYPE=<Debug|Release|RelWithDebInfo|MinSizeRel>` # Use specified build type for single-configuration CMake generators i.e. GNU Make; `Release` by default
+
+    1.2. Within your project's CMakeLists.txt add `find_package` to find `FTengSignals` package and link your target against `FTengSignals::Signals` target
+    ```cmake
+    project(SampleProject)
+    set(CMAKE_CXX_STANDARD 17)
+    set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+
+    find_package(FTengSignals REQUIRED) # here !
+
+    add_executable(${PROJECT_NAME} SampleProject.cpp)
+    target_link_libraries(
+        ${PROJECT_NAME}
+        PUBLIC
+        FTengSignals::Signals # and here !
+    )
+    ```
+
+    1.3. Within your SampleProject.cpp use signals as following:
+    ```cpp
+    #include <fteng/signals.hpp>
+    #include <iostream>
+
+    fteng::signal<void()> sig;
+
+    void slot()
+    {
+        std::cout << "signal!" << std::endl;
+    }
+
+    int main(int argc, char ** argv)
+    {
+        sig.connect(slot);
+        sig();
+        return 0;
+    }
+    ```
+
+2. Build the library as part of your project with `add_subdirectory`
+
+    2.1. Copy FTeng Signals project folder in your project folder i.e. like this:
+    ```
+    + SampleProject
+    |+ Signals
+    |- CMakeLists.txt
+    |- SampleProject.cpp
+    ```
+
+    2.2. Within your project's CMakeLists.txt add `add_subdirectory` to include FTeng Signals project as subproject and link your target against FTengSignals::Signals target
+    ```
+    project(SampleProject)
+    set(CMAKE_CXX_STANDARD 17)
+    set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+
+    add_subdirectory(Signals) # here!
+
+    add_executable(${PROJECT_NAME} SampleProject.cpp)
+    target_link_libraries(
+        ${PROJECT_NAME}
+        PUBLIC
+        FTengSignals::Signals # and here!
+    )
+    ```
+
+    1.3. Within your SampleProject.cpp use signals as following:
+    ```cpp
+    #include <fteng/signals.hpp>
+    #include <iostream>
+
+    fteng::signal<void()> sig;
+
+    void slot()
+    {
+        std::cout << "signal!" << std::endl;
+    }
+
+    int main(int argc, char ** argv)
+    {
+        sig.connect(slot);
+        sig();
+        return 0;
+    }
+    ```
+
 ### Basics
 The following example demonstrates how to define, connect and emit a signal.
 

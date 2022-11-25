@@ -65,7 +65,7 @@ class LIB_SIG_EXPORT PendingSlot
 
    private:
       SignalBase *m_sender;
-      std::unique_ptr<Internal::BentoAbstract>  m_signal_Bento;
+       std::unique_ptr<Internal::BentoAbstract>  m_signal_Bento;
       SlotBase *m_receiver;
       std::unique_ptr<Internal::BentoAbstract>  m_slot_Bento;
       std::unique_ptr<Internal::TeaCupAbstract> m_teaCup_Data;
