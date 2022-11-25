@@ -341,4 +341,5 @@ healthchecksdb
 
 /out/build
 /out/install
+CMakeSettings.json
 
