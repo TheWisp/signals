@@ -75,3 +75,10 @@ target_link_libraries(${PROJECT_NAME}
     iscool_signals Boost::system Boost::chrono Threads::Threads
 )
 
+if(NOT FTENG_SIGNALS_BUNDLED)
+	install(TARGETS ${PROJECT_NAME}
+		EXPORT ${FTengSignals_TARGETS}
+		RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+	)
+endif()
+
